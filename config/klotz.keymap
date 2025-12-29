@@ -182,7 +182,7 @@
 			bindings = <&kp LG(K) &kp LG(DOWN)>;
 		};
 
-		mac_vsc_move_right: mac_vsc_move_right {w
+		mac_vsc_move_right: mac_vsc_move_right {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LG(K) &kp LG(RIGHT)>;
