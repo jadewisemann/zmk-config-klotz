@@ -3,3 +3,31 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   build:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@v0.3
+
+publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: firmware # ZMK 워크플로우의 기본 artifact 이름
+          path: ./temp_artifacts # 임시 폴더에 다운로드
+
+      - name: Unzip firmware
+        run: |
+          mkdir -p extracted_firmware
+          if [ -f ./temp_artifacts/firmware.zip ]; then
+            unzip ./temp_artifacts/firmware.zip -d ./extracted_firmware
+          else
+            cp ./temp_artifacts/* ./extracted_firmware/ 2>/dev/null || true
+          fi
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            extracted_firmware/*.uf2
+            extracted_firmware/*.bin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
