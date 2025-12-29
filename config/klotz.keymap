@@ -33,8 +33,6 @@
 #define MAC_FUNC2 10
 
 // ALIASES
-#define PG_UP PAGE_UP
-#define PG_DN PAGE_DOWN
 
 &sk {
 	ignore-modifiers;
@@ -373,7 +371,7 @@ label= "FUNC"                              ;
 //                                                 ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛   ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛
 bindings = <
 // ╷               ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-    &kp LC(W)	   &kp LC(PAGE_UP)  &vsc_focus_up   &kp LC(PG_DN)   &none               &none           &kp F9          &kp F10         &kp F11	        &kp F12
+    &kp LC(W)	     &kp LC(PAGE_UP)  &vsc_focus_up   &kp LC(PG_DN)   &none               &none           &kp F9          &kp F10         &kp F11	        &kp F12
     &mo FUNC2      &vsc_focus_left  &vsc_focus_down &vsc_focus_righ &none               &none           &kp F5          &kp F6	        &kp F7          &kp F8
     &none 	       &kp LC(T)        &kp LC(N)       &kp LC(LS(N))  	&none               &none           &kp F1          &kp F2          &kp F3          &kp F4
                                                     &trans		    &trans  	        &trans          &trans
