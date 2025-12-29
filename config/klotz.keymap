@@ -33,6 +33,7 @@
 #define MAC_FUNC2 10
 
 // ALIASES
+#define vsc_focus_righ vsc_focus_right
 
 &sk {
 	ignore-modifiers;
