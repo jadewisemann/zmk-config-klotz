@@ -27,10 +27,13 @@ jobs:
           fi
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
+          tag_name: latest
+          name: "Latest Firmware Build"
+          draft: false
+          prerelease: false
           files: |
             extracted_firmware/*.uf2
-            extracted_firmware/*.bin
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}z
