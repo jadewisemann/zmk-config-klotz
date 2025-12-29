@@ -1,5 +1,54 @@
 on: [push, pull_request, workflow_dispatch]
 
+permissions:
+  contents: write
+
 jobs:
   build:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@v0.3
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get commit message
+        id: get_msg
+        run: |
+          # 커밋 메시지의 첫 줄만 가져와서 환경 변수에 저장
+          echo "msg=$(git log -1 --pretty=%s)" >> $GITHUB_OUTPUT
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: firmware
+          path: ./temp_artifacts
+
+      - name: Unzip firmware
+        run: |
+          mkdir -p extracted_firmware
+          if [ -f ./temp_artifacts/firmware.zip ]; then
+            unzip ./temp_artifacts/firmware.zip -d ./extracted_firmware
+          else
+            cp ./temp_artifacts/* ./extracted_firmware/ 2>/dev/null || true
+          fi
+      - name: Get short SHA
+        id: get_sha
+        run: |
+          echo "short_sha=${GITHUB_SHA::6}" >> $GITHUB_OUTPUT
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "commit-${{ steps.get_sha.outputs.short_sha }}"
+          name: "${{ steps.get_msg.outputs.msg }}"
+          draft: false
+          prerelease: false
+          make_latest: true
+          files: |
+            extracted_firmware/*.uf2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
