@@ -93,7 +93,7 @@
 		mac_func2_mode {
 			if-layers = <FUNC2 MAC_TOGGLE>;
 			then-layer = <MAC_FUNC2>;
-		};		
+		};
 	};
 
 	macros {
@@ -127,7 +127,7 @@
 			#binding-cells = <0>;
 			bindings = <&kp LC(K) &kp LEFT>;
 		};
-		
+
 		vsc_move_down: vsc_move_down {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
@@ -176,7 +176,7 @@
 			#binding-cells = <0>;
 			bindings = <&kp LG(K) &kp LG(LEFT)>;
 		};
-		
+
 		mac_vsc_move_down: mac_vsc_move_down {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
@@ -271,7 +271,7 @@
 			key-positions = <0 10 20>;
 			bindings = <&ht_bootloader 0 0>;
 		};
-		
+
 		combo_bootloader_right {
 			timeout-ms = <50>;
 			key-positions = <9 19 29>;
@@ -281,7 +281,7 @@
 		combo_macos_toggle {
 			timeout-ms = <100>;
 			key-positions = <0 1 2>;
-			bindings = <&tog MAC_TOGGLE>;			
+			bindings = <&tog MAC_TOGGLE>;
 		};
 
 		combo_soft_off {
@@ -289,12 +289,12 @@
 			key-positions = <0 9>;
 			bindings = <&soft_off>;
 		};
-	};	
+	};
 
 	keymap {
 		compatible = "zmk,keymap";
 // ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-		default_layer {		
+		default_layer {
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 label= "BASE"                              ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
@@ -309,7 +309,7 @@ label= "BASE"                              ;
 //                                                 ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛   ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛
 bindings = <
 // ╷               ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-    &kp Q           &kp W           &kp E           &kp R           &kp T               &kp Y           &kp U           &kp I           &kp O           &kp SLASH 
+    &kp Q           &kp W           &kp E           &kp R           &kp T               &kp Y           &kp U           &kp I           &kp O           &kp SLASH
     &kp A           &kp S           &kp D           &kp F           &kp G               &kp H           &kp J           &kp K           &kp L           &kp P
     &mt LSHFT Z     &mt LALT X      &kp C           &kp V           &kp B               &kp B           &kp N           &kp M           &mt RALT COMMA  &mt RSHIFT DOT
                                                     &lt SYM SPACE   &mt LCTRL TAB       &lt FUNC LANG1  &lt NAV BSPC
@@ -332,7 +332,7 @@ label= "SYM"                               ;
 //                                                 ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛   ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛
 bindings = <
 // ╷               ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-    &kp TILDE       &kp MINUS	    &kp EQUAL       &kp SEMI        &kp DQT             &kp PIPE        &kp LBRC        &kp LBKT        &kp RBKT	    &kp RBRC  
+    &kp TILDE       &kp MINUS	    &kp EQUAL       &kp SEMI        &kp DQT             &kp PIPE        &kp LBRC        &kp LBKT        &kp RBKT	    &kp RBRC
     &kp GRAVE	    &kp UNDER       &kp PLUS        &kp COLON       &kp SQT             &kp BSLH        &kp LT          &kp LPAR	    &kp RPAR        &kp GT
     &kp EXCLAMATION &kp AT_SIGN     &kp HASH        &kp DOLLAR      &caps_word          &kp RCTRL       &kp PERCENT     &kp CARET       &kp AMPERSAND   &kp ASTERISK
                                                     &trans		    &trans  		    &trans		    &trans
@@ -345,9 +345,9 @@ bindings = <
 label= "NAV"                               ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 // ┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓   ┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
-// ┃       6       ┃       7       ┃       8       ┃       9       ┃       0       ┃   ┃      TAB      ┃      HOME     ┃       UP      ┃      BSPC     ┃     (NONE)    ┃
+// ┃       6       ┃       7       ┃       8       ┃       9       ┃       0       ┃   ┃               ┃      TAB      ┃     ENTER     ┃      BSPC     ┃      ESC      ┃
 // ┣━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━┫   ┣━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━┫
-// ┃       1       ┃       2       ┃       3       ┃       4       ┃       5       ┃   ┃      SPC      ┃      LEFT     ┃      DOWN     ┃     RIGHT     ┃  LCTRL(ENTER) ┃
+// ┃       1       ┃       2       ┃       3       ┃       4       ┃       5       ┃   ┃      SPC      ┃      LEFT     ┃     DOWN      ┃       UP      ┃     RIGHT     ┃
 // ┣━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━┫   ┣━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━┫
 // ┃     LSHFT     ┃     LALT      ┃       ,       ┃       .       ┃     CAPS      ┃   ┃  PRINTSCREEN  ┃      END      ┃    PAGE UP    ┃   PAGE DOWN   ┃     (NONE)    ┃
 // ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━┫   ┣━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛
@@ -355,9 +355,9 @@ label= "NAV"                               ;
 //                                                 ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛   ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛
 bindings = <
 // ╷               ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-    &kp N6 		    &kp N7		    &kp NUMBER_8    &kp N9     	    &kp N0              &kp TAB         &kp HOME        &kp UP          &kp BACKSPACE   &none 
-    &kp N1          &kp N2     	    &kp N3     		&kp N4     	    &kp N5              &kp SPACE       &kp LEFT        &kp DOWN        &kp RIGHT       &mt LCTRL ENTER
-    &kp LSHFT 	    &kp LALT        &kp COMMA       &kp DOT         &caps_word          &kp PRINTSCREEN &kp END         &kp PAGE_UP     &kp PAGE_DOWN   &none
+    &kp N6 		    &kp N7		    &kp NUMBER_8    &kp N9     	    &kp N0              &none           &kp TAB         &kp ENTER       &kp BACKSPACE   &kp ESC
+    &kp N1          &kp N2     	    &kp N3     		&kp N4     	    &kp N5              &kp SPACE       &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT
+    &kp LSHFT 	    &kp LALT        &kp COMMA       &kp DOT         &caps_word          &kp PRINTSCREEN &kp HOME        &kp PAGE_DOWN   &kp PAGE_UP     &kp END
                                                     &trans		    &trans  		    &trans          &trans
 >;
 };
@@ -401,9 +401,9 @@ label= "FUNC2"                             ;
 //                                                 ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛   ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛
 bindings = <
 // ╷               ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-    &none           &trans          &vsc_move_up    &trans          &none               &none           &none           &none           &none           &none 
-    &none           &vsc_move_left  &vsc_move_down  &vsc_move_right &none               &none           &none           &none           &none           &none 
-    &none           &none           &none           &none           &none               &none           &none           &none           &none           &none 
+    &none           &trans          &vsc_move_up    &trans          &none               &none           &none           &none           &none           &none
+    &none           &vsc_move_left  &vsc_move_down  &vsc_move_right &none               &none           &none           &none           &none           &none
+    &none           &none           &none           &none           &none               &none           &none           &none           &none           &none
                                                     &trans          &trans              &trans          &trans
 >;
 };
@@ -424,10 +424,10 @@ label= "SET"                               ;
 //                                                 ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛   ┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┛
 bindings = <
 // ╷               ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-    &bootloader     &none           &out OUT_TOG    &bt BT_CLR      &bt BT_SEL 0        &bt BT_SEL 3    &none           &none           &tog MAC_TOGGLE &bootloader 
+    &bootloader     &none           &out OUT_TOG    &bt BT_CLR      &bt BT_SEL 0        &bt BT_SEL 3    &none           &none           &tog MAC_TOGGLE &bootloader
     &none           &none           &out OUT_BLE    &none           &bt BT_SEL 1        &bt BT_SEL 4    &none           &none           &none           &none
     &studio_unlock  &none           &out OUT_USB    &none           &bt BT_SEL 2        &bt BT_SEL 5    &none           &none           &none           &studio_unlock
-													&none           &none               &none           &none 
+													&none           &none               &none           &none
 >;
 };
 
@@ -437,11 +437,11 @@ bindings = <
 label= "MAC TOGGLE"                        ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 bindings = <
-    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans 
-    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans 
-    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans 
-                                                    &trans          &trans              &trans          &trans 
->;			
+    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+                                                    &trans          &trans              &trans          &trans
+>;
 };
 
 // ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
@@ -450,9 +450,9 @@ bindings = <
 label= "MAC OVERLAY"                       ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 bindings = <
-    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans 
-    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans 
-    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans 
+    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
                                                     &trans          &mt LGUI TAB        &lt FUNC F18    &trans
 >;
 };
@@ -463,11 +463,11 @@ bindings = <
 label= "MAC NAV"                           ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 bindings = <
-    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans 
-    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans 
-    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans 
-                                                    &trans          &trans              &trans          &trans 
->;			
+    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+    &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+                                                    &trans          &trans              &trans          &trans
+>;
 };
 
 
@@ -477,8 +477,8 @@ bindings = <
 label= "MAC FUNC"                          ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 bindings = <
-    &kp LG(W)       &kp LG(PAGE_UP)   	&mac_vsc_focus_up   &kp LG(PAGE_DOWN)     &none          &none         &trans       &trans        &trans	     &trans   
-    &mo FUNC2       &mac_vsc_focus_left &mac_vsc_focus_down &mac_vsc_focus_right  &none          &none         &trans       &trans        &trans         &trans 
+    &kp LG(W)       &kp LG(PAGE_UP)   	&mac_vsc_focus_up   &kp LG(PAGE_DOWN)     &none          &none         &trans       &trans        &trans	     &trans
+    &mo FUNC2       &mac_vsc_focus_left &mac_vsc_focus_down &mac_vsc_focus_right  &none          &none         &trans       &trans        &trans         &trans
     &none           &kp LG(T)         	&kp LG(N)           &kp LG(LS(N))         &none          &none         &trans       &trans        &trans         &trans
                                                             &trans                &trans         &trans        &trans
 >;
@@ -490,9 +490,9 @@ bindings = <
 label= "MAC FUNC 2"                        ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 bindings = <
-    &none        &trans             &mac_vsc_move_up    &trans              &none       &none        &none        &none        &none        &none 
-    &none        &mac_vsc_move_left &mac_vsc_move_down  &mac_vsc_move_right &none       &none        &none        &none        &none        &none 
-    &none        &none              &none               &none               &none       &none        &none        &none        &none        &none 
+    &none        &trans             &mac_vsc_move_up    &trans              &none       &none        &none        &none        &none        &none
+    &none        &mac_vsc_move_left &mac_vsc_move_down  &mac_vsc_move_right &none       &none        &none        &none        &none        &none
+    &none        &none              &none               &none               &none       &none        &none        &none        &none        &none
                                                         &trans              &trans      &trans       &trans
 >;
 };
