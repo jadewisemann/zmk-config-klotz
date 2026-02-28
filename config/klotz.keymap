@@ -214,18 +214,6 @@
 	combos {
 		compatible = "zmk,combos";
 
-		combo_enter {
-			timeout-ms = <50>;
-			key-positions = <17 18>;
-			bindings = <&kp ENTER>;
-		};
-
-		combo_esc {
-			timeout-ms = <50>;
-			key-positions = <1 2>;
-			bindings = <&kp ESC>;
-		};
-
 		combo_capsword {
 			timeout-ms = <50>;
 			key-positions = <20 29>;
@@ -250,28 +238,10 @@
 			bindings = <&mo SETTINGS>;
 		};
 
-		combo_bootloader_left {
-			timeout-ms = <50>;
-			key-positions = <0 10 20>;
-			bindings = <&ht_bootloader 0 0>;
-		};
-
-		combo_bootloader_right {
-			timeout-ms = <50>;
-			key-positions = <9 19 29>;
-			bindings = <&ht_bootloader 0 0>;
-		};
-
 		combo_macos_toggle {
 			timeout-ms = <100>;
 			key-positions = <0 1 2>;
 			bindings = <&tog MAC_TOGGLE>;
-		};
-
-		combo_soft_off {
-			timeout-ms = <50>;
-			key-positions = <0 9>;
-			bindings = <&soft_off>;
 		};
 	};
 
@@ -292,9 +262,9 @@
 			label= "NAV";
 			bindings = <
 				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-				&kp N6 		      &kp N7		      &kp NUMBER_8    &kp N9     	    &kp N0              &none           &kp TAB         &kp ENTER       &kp BACKSPACE   &kp ESC
+				&kp N6 		      &kp N7		      &kp NUMBER_8    &kp N9     	    &kp N0              &kp ESC         &kp TAB         &kp ENTER       &kp BACKSPACE   &kp DEL
 				&kp N1          &kp N2     	    &kp N3     		  &kp N4     	    &kp N5              &kp SPACE       &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT
-				&kp LSHFT 	    &kp LALT        &kp COMMA       &kp DOT         &caps_word          &kp PRINTSCREEN &kp HOME        &kp PAGE_DOWN   &kp PAGE_UP     &kp END
+				&kp LSHFT 	    &kp LALT        &kp COMMA       &kp DOT         &caps_word          &kp LS(LG(S))   &kp HOME        &kp PAGE_DOWN   &kp PAGE_UP     &kp END
 																												&trans		      &trans  		        &trans          &trans
 			>;
 		};
@@ -304,8 +274,8 @@
 			label= "SYM";
 			bindings = <
 				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-				&kp TILDE       &kp MINUS	      &kp EQUAL       &kp SEMI        &kp DQT             &kp PIPE        &kp LBRC        &kp LBKT        &kp RBKT	      &kp RBRC
-				&kp GRAVE	      &kp UNDER       &kp PLUS        &kp COLON       &kp SQT             &kp BSLH        &kp LT          &kp LPAR	      &kp RPAR        &kp GT
+				&kp BSLH        &kp MINUS	      &kp EQUAL       &kp SEMI        &kp SQT             &kp DQT         &kp COLON       &kp PLUS        &kp UNDER	      &kp PIPE
+				&kp GRAVE	      &kp LT          &kp LBRC        &kp LPAR        &kp LBKT            &kp RBKT        &kp RPAR        &kp RBRC	      &kp GT          &kp TILDE
 				&kp EXCLAMATION &kp AT_SIGN     &kp HASH        &kp DOLLAR      &caps_word          &kp RCTRL       &kp PERCENT     &kp CARET       &kp AMPERSAND   &kp ASTERISK
 																												&trans		     	&trans  		          &trans		    &trans
 			>;
