@@ -16,8 +16,6 @@
 #define MAC_FUNC 9
 #define MAC_FUNC2 10
 
-// ALIASES
-
 &sk {
 	ignore-modifiers;
 };
@@ -187,31 +185,31 @@
 	combos {
 		compatible = "zmk,combos";
 
-		combo_capsword {
+		cmb_capsword {
 			timeout-ms = <50>;
 			key-positions = <20 29>;
 			bindings = <&caps_word>;
 		};
 
-		combo_left_thumb {
+		cmb_left_thumb {
 			timeout-ms = <80>;
 			key-positions = <30 31>;
 			bindings = <&mt LGUI ESC>;
 		};
 
-		combo_right_thumb {
+		cmb_right_thumb {
 			timeout-ms = <80>;
 			key-positions = <32 33>;
 			bindings = <&kp DEL>;
 		};
 
-		combo_settings {
+		cmb_settings {
 			timeout-ms = <200>;
 			key-positions = <31 32>;
 			bindings = <&mo SETTINGS>;
 		};
 
-		combo_macos_toggle {
+		cmb_macos_toggle {
 			timeout-ms = <100>;
 			key-positions = <0 1 2>;
 			bindings = <&tog MAC_TOGGLE>;
@@ -333,7 +331,7 @@
 		mac_func_layer {
 			label= "MAC FUNC";
 			bindings = <
-			    //              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
+			  //              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
 				&kp LG(W)       &kp LG(PG_UP)   &m_vsc_fcs_up   &kp LG(PG_DN)   &none               &none           &trans          &trans          &trans	        &trans
 				&mo FUNC2       &m_vsc_fcs_lf   &m_vsc_fcs_dn   &m_vsc_fcs_ri   &none               &none           &trans          &trans          &trans          &trans
 				&none           &kp LG(T)       &kp LG(N)       &kp LG(LS(N))   &none               &none           &trans          &trans          &trans          &trans
@@ -345,7 +343,7 @@
 		mac_func2_layer {
 			label= "MAC FUNC 2";
 			bindings = <
-                //              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
+        //              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
 				&none           &trans          &m_vsc_mov_up   &trans          &none               &none           &none           &none           &none           &none
 				&none           &m_vsc_mov_lf   &m_vsc_mov_dn   &m_vsc_mov_ri   &none               &none           &none           &none           &none           &none
 				&none           &none           &none           &none           &none               &none           &none           &none           &none           &none
