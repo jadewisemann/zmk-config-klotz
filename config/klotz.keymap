@@ -17,7 +17,6 @@
 #define MAC_FUNC2 10
 
 // ALIASES
-#define vsc_focus_righ vsc_focus_right
 
 &sk {
 	ignore-modifiers;
@@ -81,133 +80,107 @@
 	};
 
 	macros {
-		// vscode shortcut -- windows
-		vsc_focus_left: vsc_focus_left {
+		vsc_fcs_lf: vsc_fcs_lf {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LC(K) &kp LC(LEFT)>;
 		};
 
-		vsc_focus_down: vsc_focus_down {
+		vsc_fcs_dn: vsc_fcs_dn {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LC(K) &kp LC(DOWN)>;
 		};
 
-		vsc_focus_right: vsc_focus_right {
+		vsc_fcs_ri: vsc_fcs_ri {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LC(K) &kp LC(RIGHT)>;
 		};
 
-		vsc_focus_up: vsc_focus_up {
+		vsc_fcs_up: vsc_fcs_up {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LC(K) &kp LC(UP)>;
 		};
 
-		vsc_move_left: vsc_move_left {
+		vsc_mov_lf: vsc_mov_lf {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LC(K) &kp LEFT>;
 		};
 
-		vsc_move_down: vsc_move_down {
+		vsc_mov_dn: vsc_mov_dn {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LC(K) &kp DOWN>;
 		};
 
-		vsc_move_right: vsc_move_right {
+		vsc_mov_ri: vsc_mov_ri {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LC(K) &kp RIGHT>;
 		};
 
-		vsc_move_up: vsc_move_up {
+		vsc_mov_up: vsc_mov_up {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LC(K) &kp UP>;
 		};
 
 		// vscode -- macos
-		mac_vsc_focus_left: mac_vsc_focus_left {
+		m_vsc_fcs_lf: m_vsc_fcs_lf {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LG(K) &kp LG(LEFT)>;
 		};
 
-		mac_vsc_focus_down: mac_vsc_focus_down {
+		m_vsc_fcs_dn: m_vsc_fcs_dn {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LG(K) &kp LG(DOWN)>;
 		};
 
-		mac_vsc_focus_right: mac_vsc_focus_right {
+		m_vsc_fcs_ri: m_vsc_fcs_ri {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LG(K) &kp LG(RIGHT)>;
 		};
 
-		mac_vsc_focus_up: mac_vsc_focus_up {
+		m_vsc_fcs_up: m_vsc_fcs_up {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LG(K) &kp LG(UP)>;
 		};
 
-		mac_vsc_move_left: mac_vsc_move_left {
+		m_vsc_mov_lf: m_vsc_mov_lf {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LG(K) &kp LG(LEFT)>;
 		};
 
-		mac_vsc_move_down: mac_vsc_move_down {
+		m_vsc_mov_dn: m_vsc_mov_dn {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LG(K) &kp LG(DOWN)>;
 		};
 
-		mac_vsc_move_right: mac_vsc_move_right {
+		m_vsc_mov_ri: m_vsc_mov_ri {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LG(K) &kp LG(RIGHT)>;
 		};
 
-		mac_vsc_move_up: mac_vsc_move_up {
+		m_vsc_mov_up: m_vsc_mov_up {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LG(K) &kp LG(UP)>;
-		};
-
-		// shortcut for macos
-		mac_app_switch: mac_app_switch {
-			compatible = "zmk,behavior-macro";
-			#binding-cells = <0>;
-			bindings = <&kp LG(TAB)>;
-		};
-
-		mac_spotlight: mac_spotlight {
-			compatible = "zmk,behavior-macro";
-			#binding-cells = <0>;
-			bindings = <&kp LG(SPACE)>;
-		};
-
-		mac_mission_control: mac_mission_control {
-			compatible = "zmk,behavior-macro";
-			#binding-cells = <0>;
-			bindings = <&kp F3>;
 		};
 
 		mac_screenshot: mac_screenshot {
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LG(LS(N4))>;
-		};
-
-		mac_partial_screenshot: mac_partial_screenshot {
-			compatible = "zmk,behavior-macro";
-			#binding-cells = <0>;
-			bindings = <&kp LG(LS(N3))>;
 		};
 	};
 
@@ -254,7 +227,8 @@
 				&kp Q           &kp W           &kp E           &kp R           &kp T               &kp Y           &kp U           &kp I           &kp O           &kp SLASH
 				&kp A           &kp S           &kp D           &kp F           &kp G               &kp H           &kp J           &kp K           &kp L           &kp P
 				&mt LSHFT Z     &mt LALT X      &kp C           &kp V           &kp B               &kp B           &kp N           &kp M           &mt RALT COMMA  &mt RSHIFT DOT
-																												&lt SYM SPACE   &mt LCTRL TAB       &lt FUNC LANG1  &lt NAV LANG1
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+        &lt SYM SPACE   &mt LCTRL TAB   &lt FUNC LANG1  &lt NAV LANG1
 			>;
 		};
 
@@ -265,7 +239,8 @@
 				&kp N6 		      &kp N7		      &kp NUMBER_8    &kp N9     	    &kp N0              &kp ESC         &kp TAB         &kp ENTER       &kp BACKSPACE   &kp DEL
 				&kp N1          &kp N2     	    &kp N3     		  &kp N4     	    &kp N5              &kp SPACE       &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT
 				&kp LSHFT 	    &kp LALT        &kp COMMA       &kp DOT         &caps_word          &kp LS(LG(S))   &kp HOME        &kp PAGE_DOWN   &kp PAGE_UP     &kp END
-																												&trans		      &trans  		        &trans          &trans
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+        &trans		      &trans          &trans          &trans
 			>;
 		};
 
@@ -274,10 +249,11 @@
 			label= "SYM";
 			bindings = <
 				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-				&kp BSLH        &kp MINUS	      &kp EQUAL       &kp SEMI        &kp SQT             &kp DQT         &kp COLON       &kp PLUS        &kp UNDER	      &kp PIPE
-				&kp GRAVE	      &kp LT          &kp LBRC        &kp LPAR        &kp LBKT            &kp RBKT        &kp RPAR        &kp RBRC	      &kp GT          &kp TILDE
-				&kp EXCLAMATION &kp AT_SIGN     &kp HASH        &kp DOLLAR      &caps_word          &kp RCTRL       &kp PERCENT     &kp CARET       &kp AMPERSAND   &kp ASTERISK
-																												&trans		     	&trans  		          &trans		    &trans
+				&kp BSLH        &kp MINUS	      &kp EQUAL       &kp SEMI        &kp SQT             &kp DQT         &kp COLON       &kp PLUS        &kp UNDER	    &kp PIPE
+				&kp GRAVE	      &kp LT          &kp LBRC        &kp LPAR        &kp LBKT            &kp RBKT        &kp RPAR        &kp RBRC	    &kp GT          &kp TILDE
+				&kp EXCL        &kp AT_SIGN     &kp HASH        &kp DOLLAR      &caps_word          &kp RCTRL       &kp PERCENT     &kp CARET       &kp AMPERSAND   &kp ASTERISK
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans		      &trans          &trans		      &trans
 			>;
 		};
 
@@ -285,10 +261,11 @@
 			label= "FUNC";
 			bindings = <
 				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-				&kp LC(W)	     &kp LC(PAGE_UP)  &vsc_focus_up   &kp LC(PG_DN)   &none               &kp DOT         &kp N7          &kp N8          &kp N9          &kp ENTER
-				&mo FUNC2      &vsc_focus_left  &vsc_focus_down &vsc_focus_righ &none               &kp COMMA       &kp N4          &kp N5          &kp N6          &kp N0
-				&none 	       &kp LC(T)        &kp LC(N)       &kp LC(LS(N))  	&none               &none           &kp N1          &kp N2          &kp N3          &none
-																												&trans		      &trans  	          &trans          &trans
+				&kp LC(W)	      &kp LC(PG_UP)   &vsc_fcs_up     &kp LC(PG_DN)   &none               &kp DOT         &kp N7          &kp N8          &kp N9          &kp ENTER
+				&mo FUNC2       &vsc_fcs_lf     &vsc_fcs_dn     &vsc_fcs_ri     &none               &kp COMMA       &kp N4          &kp N5          &kp N6          &kp N0
+				&none 	        &kp LC(T)       &kp LC(N)       &kp LC(LS(N))  	&none               &none           &kp N1          &kp N2          &kp N3          &none
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans		      &trans          &trans          &trans
 			>;
 		};
 
@@ -296,10 +273,11 @@
 			label= "FUNC2";
 			bindings = <
 				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-				&none           &trans          &vsc_move_up    &trans          &none               &none           &none           &none           &none           &none
-				&none           &vsc_move_left  &vsc_move_down  &vsc_move_right &none               &none           &none           &none           &none           &none
+				&none           &trans          &vsc_mov_up     &trans          &none               &none           &none           &none           &none           &none
+				&none           &vsc_mov_lf     &vsc_mov_dn     &vsc_mov_ri     &none               &none           &none           &none           &none           &none
 				&none           &none           &none           &none           &none               &none           &none           &none           &none           &none
-																												&trans          &trans              &trans          &trans
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans          &trans          &trans          &trans
 			>;
 		};
 
@@ -310,17 +288,20 @@
 				&bootloader     &none           &out OUT_TOG    &bt BT_CLR      &bt BT_SEL 0        &bt BT_SEL 3    &none           &none           &tog MAC_TOGGLE &bootloader
 				&none           &none           &out OUT_BLE    &none           &bt BT_SEL 1        &bt BT_SEL 4    &none           &none           &none           &none
 				&studio_unlock  &none           &out OUT_USB    &none           &bt BT_SEL 2        &bt BT_SEL 5    &none           &none           &none           &studio_unlock
-																												&none           &none               &none           &none
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&none           &none           &none           &none
 			>;
 		};
 
 		mac_toggle_layer {
 			label= "MAC TOGGLE";
 			bindings = <
-					&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
-					&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
-					&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
-																													&trans          &trans              &trans          &trans
+			    //              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
+				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans          &trans          &trans          &trans
 			>;
 		};
 
@@ -331,7 +312,8 @@
 				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
 				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
 				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
-																												&trans          &mt LGUI TAB        &lt FUNC F18    &lt NAV F18
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans          &mt LGUI TAB    &lt FUNC F18    &lt NAV F18
 			>;
 		};
 
@@ -342,7 +324,8 @@
 				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
 				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
 				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
-																												&trans          &trans              &trans          &trans
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans          &trans          &trans          &trans
 				>;
 			};
 
@@ -350,20 +333,24 @@
 		mac_func_layer {
 			label= "MAC FUNC";
 			bindings = <
-				&kp LG(W)       &kp LG(PAGE_UP)   	&mac_vsc_focus_up   &kp LG(PAGE_DOWN)     &none       &none           &trans          &trans          &trans	        &trans
-				&mo FUNC2       &mac_vsc_focus_left &mac_vsc_focus_down &mac_vsc_focus_right  &none       &none           &trans          &trans          &trans         &trans
-				&none           &kp LG(T)         	&kp LG(N)           &kp LG(LS(N))         &none       &none           &trans          &trans          &trans         &trans
-																																&trans                &trans      &trans          &trans
+			    //              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
+				&kp LG(W)       &kp LG(PG_UP)   &m_vsc_fcs_up   &kp LG(PG_DN)   &none               &none           &trans          &trans          &trans	        &trans
+				&mo FUNC2       &m_vsc_fcs_lf   &m_vsc_fcs_dn   &m_vsc_fcs_ri   &none               &none           &trans          &trans          &trans          &trans
+				&none           &kp LG(T)       &kp LG(N)       &kp LG(LS(N))   &none               &none           &trans          &trans          &trans          &trans
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans          &trans          &trans          &trans
 			>;
 			};
 
 		mac_func2_layer {
 			label= "MAC FUNC 2";
 			bindings = <
-				&none        &trans             &mac_vsc_move_up    &trans              &none       &none        &none        &none        &none        &none
-				&none        &mac_vsc_move_left &mac_vsc_move_down  &mac_vsc_move_right &none       &none        &none        &none        &none        &none
-				&none        &none              &none               &none               &none       &none        &none        &none        &none        &none
-																														&trans              &trans      &trans       &trans
+                //              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
+				&none           &trans          &m_vsc_mov_up   &trans          &none               &none           &none           &none           &none           &none
+				&none           &m_vsc_mov_lf   &m_vsc_mov_dn   &m_vsc_mov_ri   &none               &none           &none           &none           &none           &none
+				&none           &none           &none           &none           &none               &none           &none           &none           &none           &none
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans          &trans          &trans          &trans
 			>;
 		};
 	};
