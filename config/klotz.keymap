@@ -246,7 +246,7 @@
 				&kp A           &kp S           &kp D           &kp F           &kp G               &kp H           &kp J           &kp K           &kp L           &kp P
 				&mt LSHFT Z     &mt LALT X      &kp C           &kp V           &kp B               &kp B           &kp N           &kp M           &mt RALT COMMA  &mt RSHIFT DOT
 				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
-        &lt NAV SPACE   &lt NUM TAB     &lt FUNC LANG1  &lt SYM LANG1
+        &lt NAV SPACE   &lt NUM TAB     &lt SYM2 LANG1  &lt SYM LANG1
 			>;
 		};
     
@@ -290,9 +290,9 @@
 			label= "SYM2";
 			bindings = <
 				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-        &none           &kp EQUAL       &kp PLUS        &kp SEMI        &kp COLON           &none           &none           &none           &none           &none            
-        &kp LBRC        &kp LPAR        &kp RPAR        &kp RBRC        &kp MINUS           &sk LGUI        &sk LCTRL       &sk LALT        &kp LSHFT       &none            
-        &kp LT          &kp LBKT        &kp RBKT        &kp GT          &kp UNDER           &none           &none           &none           &none           &none            
+        &none           &kp GRAVE       &kp TILDE       &kp SQT         &kp DQT             &none           &none           &none           &none           &none            
+        &kp PRCNT       &kp CARET       &kp AMPS        &kp ASTRK       &kp BSLH            &sk LGUI        &sk LCTRL       &sk LALT        &kp LSHFT       &none            
+        &kp EXCL        &kp AT          &kp HASH        &kp DLLR        &kp PIPE            &none           &none           &none           &none           &none            
 				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
 				&trans		      &trans          &trans		      &trans
 			>;
