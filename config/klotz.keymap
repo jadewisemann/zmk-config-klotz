@@ -6,15 +6,20 @@
 // LAYER
 #define BASE 0
 #define NAV 1
-#define SYM 2
-#define FUNC 3
-#define FUNC2 4
-#define SETTINGS 5
-#define MAC_TOGGLE 6
-#define MAC_OVERLAY 7
-#define MAC_NAV 8
-#define MAC_FUNC 9
-#define MAC_FUNC2 10
+#define NUM 2
+#define SYM 3
+#define SYM2 4
+#define FUNC 5
+#define FUNC2 6
+#define SETTINGS 7
+#define MAC_TOGGLE 8
+#define MAC_OVERLAY 9
+#define MAC_NAV 9
+#define MAC_NUM 10
+#define MAC_SYM 11
+#define MAC_SYM2 12
+#define MAC_FUNC 13
+#define MAC_FUNC2 14
 
 &sk {
 	ignore-modifiers;
@@ -65,6 +70,20 @@
 			then-layer = <MAC_NAV>;
 		};
 
+		mac_num_mode {
+			if-layers = <NUM MAC_TOGGLE>;
+			then-layer = <MAC_NUM>;
+		};
+		
+    mac_sym_mode {
+			if-layers = <SYM MAC_TOGGLE>;
+			then-layer = <MAC_SYM>;
+		};
+    
+    mac_sym2_mode {
+			if-layers = <SYM2 MAC_TOGGLE>;
+			then-layer = <MAC_SYM2>;
+		};
 
 		mac_func_mode {
 			if-layers = <FUNC MAC_TOGGLE>;
@@ -218,6 +237,7 @@
 
 	keymap {
 		compatible = "zmk,keymap";
+
 		default_layer {
 		label= "BASE";
 			bindings = <
@@ -226,30 +246,53 @@
 				&kp A           &kp S           &kp D           &kp F           &kp G               &kp H           &kp J           &kp K           &kp L           &kp P
 				&mt LSHFT Z     &mt LALT X      &kp C           &kp V           &kp B               &kp B           &kp N           &kp M           &mt RALT COMMA  &mt RSHIFT DOT
 				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
-        &lt SYM SPACE   &mt LCTRL TAB   &lt FUNC LANG1  &lt NAV LANG1
+        &lt NAV SPACE   &lt NUM TAB     &lt FUNC LANG1  &lt SYM LANG1
 			>;
 		};
-
+    
 		nav_layer {
 			label= "NAV";
 			bindings = <
 				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-				&kp N6 		      &kp N7		      &kp NUMBER_8    &kp N9     	    &kp N0              &kp ESC         &kp TAB         &kp ENTER       &kp BACKSPACE   &kp DEL
-				&kp N1          &kp N2     	    &kp N3     		  &kp N4     	    &kp N5              &kp SPACE       &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT
-				&kp LSHFT 	    &kp LALT        &kp COMMA       &kp DOT         &caps_word          &kp LS(LG(S))   &kp HOME        &kp PAGE_DOWN   &kp PAGE_UP     &kp END
+				&none           &none		        &none           &none     	    &none               &kp ESC         &kp TAB         &kp ENTER       &kp BACKSPACE   &kp DEL
+				&none           &sk LSHFT     	&sk LALT        &sk LCTRL     	&sk LGUI            &kp SPACE       &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT
+				&none           &none           &none           &none           &none               &kp LS(LG(S))   &kp HOME        &kp PAGE_DOWN   &kp PAGE_UP     &kp END
 				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
-        &trans		      &trans          &trans          &trans
+        &trans 		      &trans          &trans          &trans
 			>;
 		};
 
-
+    num_layer {
+			label= "NUM";
+			bindings = <
+				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
+				&none           &none           &none           &none           &none               &kp DOT         &kp N7          &kp N8          &kp N9          &none
+				&none           &sk LSHFT     	&sk LALT        &sk LCTRL     	&sk LGUI            &kp COMMA       &kp N4          &kp N5          &kp N6          &kp ENTER
+				&none           &none           &none           &none           &none               &none           &kp N1          &kp N2          &kp N3          &none
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans		      &trans          &trans          &kp N0
+			>;
+		};
+    
 		sym_layer {
 			label= "SYM";
 			bindings = <
 				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-				&kp BSLH        &kp MINUS	      &kp EQUAL       &kp SEMI        &kp SQT             &kp DQT         &kp COLON       &kp PLUS        &kp UNDER	    &kp PIPE
-				&kp GRAVE	      &kp LT          &kp LBRC        &kp LPAR        &kp LBKT            &kp RBKT        &kp RPAR        &kp RBRC	    &kp GT          &kp TILDE
-				&kp EXCL        &kp AT_SIGN     &kp HASH        &kp DOLLAR      &caps_word          &kp RCTRL       &kp PERCENT     &kp CARET       &kp AMPERSAND   &kp ASTERISK
+        &none           &kp EQUAL       &kp PLUS        &kp SEMI        &kp COLON           &none           &none           &none           &none           &none            
+        &kp LBRC        &kp LPAR        &kp RPAR        &kp RBRC        &kp MINUS           &sk LGUI        &sk LCTRL       &sk LALT        &kp LSHFT       &none            
+        &kp LT          &kp LBKT        &kp RBKT        &kp GT          &kp UNDER           &none           &none           &none           &none           &none            
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans		      &trans          &trans		      &trans
+			>;
+		};
+
+		sym_2_layer {
+			label= "SYM2";
+			bindings = <
+				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
+        &none           &kp EQUAL       &kp PLUS        &kp SEMI        &kp COLON           &none           &none           &none           &none           &none            
+        &kp LBRC        &kp LPAR        &kp RPAR        &kp RBRC        &kp MINUS           &sk LGUI        &sk LCTRL       &sk LALT        &kp LSHFT       &none            
+        &kp LT          &kp LBKT        &kp RBKT        &kp GT          &kp UNDER           &none           &none           &none           &none           &none            
 				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
 				&trans		      &trans          &trans		      &trans
 			>;
@@ -259,11 +302,11 @@
 			label= "FUNC";
 			bindings = <
 				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
-				&kp LC(W)	      &kp LC(PG_UP)   &vsc_fcs_up     &kp LC(PG_DN)   &none               &kp DOT         &kp N7          &kp N8          &kp N9          &kp ENTER
-				&mo FUNC2       &vsc_fcs_lf     &vsc_fcs_dn     &vsc_fcs_ri     &none               &kp COMMA       &kp N4          &kp N5          &kp N6          &kp N0
-				&none 	        &kp LC(T)       &kp LC(N)       &kp LC(LS(N))  	&none               &none           &kp N1          &kp N2          &kp N3          &none
+				&none           &trans          &vsc_mov_up     &trans          &none               &none           &none           &none           &none           &none
+				&none           &vsc_mov_lf     &vsc_mov_dn     &vsc_mov_ri     &none               &none           &none           &none           &none           &none
+				&none           &none           &none           &none           &none               &none           &none           &none           &none           &none
 				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
-				&trans		      &trans          &trans          &trans
+				&trans          &trans          &trans          &trans
 			>;
 		};
 
@@ -324,9 +367,44 @@
 				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
 				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
 				&trans          &trans          &trans          &trans
-				>;
-			};
+      >;
+    };
 
+		mac_num_layer {
+			label= "MAC NUM";
+			bindings = <
+				//              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
+				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+				&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans          &trans          &trans          &trans
+      >;
+    };
+
+		mac_sym_layer {
+			label= "MAC SYM";
+			bindings = <
+			  //              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
+				&kp LG(W)       &kp LG(PG_UP)   &m_vsc_fcs_up   &kp LG(PG_DN)   &none               &none           &trans          &trans          &trans	        &trans
+				&mo FUNC2       &m_vsc_fcs_lf   &m_vsc_fcs_dn   &m_vsc_fcs_ri   &none               &none           &trans          &trans          &trans          &trans
+				&none           &kp LG(T)       &kp LG(N)       &kp LG(LS(N))   &none               &none           &trans          &trans          &trans          &trans
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans          &trans          &trans          &trans
+			>;
+    };
+    
+    mac_sym_2_layer {
+			label= "MAC SYM 2";
+			bindings = <
+			  //              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
+				&kp LG(W)       &kp LG(PG_UP)   &m_vsc_fcs_up   &kp LG(PG_DN)   &none               &none           &trans          &trans          &trans	        &trans
+				&mo FUNC2       &m_vsc_fcs_lf   &m_vsc_fcs_dn   &m_vsc_fcs_ri   &none               &none           &trans          &trans          &trans          &trans
+				&none           &kp LG(T)       &kp LG(N)       &kp LG(LS(N))   &none               &none           &trans          &trans          &trans          &trans
+				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
+				&trans          &trans          &trans          &trans
+			>;
+    };
 
 		mac_func_layer {
 			label= "MAC FUNC";
@@ -338,9 +416,9 @@
 				//left outter   ╷left inner     ╷right inner    ╷right outter   ╷
 				&trans          &trans          &trans          &trans
 			>;
-			};
+    };
 
-		mac_func2_layer {
+		mac_func_2_layer {
 			label= "MAC FUNC 2";
 			bindings = <
         //              ╷               ╷               ╷               ╷               ╷   ╷               ╷               ╷               ╷               ╷               ╷
