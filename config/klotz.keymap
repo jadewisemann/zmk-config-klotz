@@ -22,7 +22,9 @@
 #define MAC_FUNC2 14
 
 &sk {
-	ignore-modifiers;
+  release-after-ms = <2000>;
+  quick-release;
+	//ignore-modifiers;
 };
 
 &mt {
@@ -192,12 +194,6 @@
 			compatible = "zmk,behavior-macro";
 			#binding-cells = <0>;
 			bindings = <&kp LG(K) &kp LG(UP)>;
-		};
-
-		mac_screenshot: mac_screenshot {
-			compatible = "zmk,behavior-macro";
-			#binding-cells = <0>;
-			bindings = <&kp LG(LS(N4))>;
 		};
 	};
 
