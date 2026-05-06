@@ -118,32 +118,6 @@ ZMK_MACRO(m_vsc_mov_up, bindings = <&kp LG(K) &kp LG(UP)>;)
 COMBO(copy, &kp LC(C), 22 12, 40)
 COMBO(paste, &kp LC(V), 23 13, 40)
 
-COMBO(l_shft, &kp LSHFT, 30 11, 50)
-COMBO(l_alt, &kp LALT, 30 12, 50)
-COMBO(l_ctrl, &kp LCTRL, 30 13, 50)
-COMBO(l_gui, &kp LGUI, 30 14, 50)
-COMBO(l_ctrl_alt, &kp LC(LALT), 30 13 12, 50)
-COMBO(l_ctrl_shft, &kp LC(LSHFT), 30 13 11, 50)
-COMBO(l_gui_shft, &kp LG(LSHFT), 30 14 11, 50)
-COMBO(l_meh_1, &kp LC(LA(LSHFT)), 30 13 12 11, 70)
-COMBO(l_meh_2, &kp LC(LA(LGUI)), 30 14 13 12, 70)
-COMBO(l_meh_3, &kp LC(LG(LSHFT)), 30 14 13 11, 70)
-COMBO(l_meh_4, &kp LA(LG(LSHFT)), 30 14 12 11, 70)
-COMBO(l_hyper, &kp LC(LA(LG(LSHFT))), 30 14 13 12 11, 80)
-
-COMBO(r_gui, &kp RGUI, 33 15, 50)
-COMBO(r_ctrl, &kp LCTRL, 33 16, 50)
-COMBO(r_alt, &kp RALT, 33 17, 50)
-COMBO(r_shft, &kp RSHFT, 33 18, 50)
-COMBO(r_ctrl_alt, &kp RC(RA(RALT)), 33 16 17, 50)
-COMBO(r_ctrl_shft, &kp RC(RSHFT), 33 16 18, 50)
-COMBO(r_gui_shft, &kp RG(RSHFT), 33 15 18, 50)
-COMBO(r_meh_1, &kp RC(RA(RSHFT)), 33 16 17 18, 70)
-COMBO(r_meh_2, &kp RC(RA(RGUI)), 33 15 16 17, 70)
-COMBO(r_meh_3, &kp RC(RG(RSHFT)), 33 15 16 18, 70)
-COMBO(r_meh_4, &kp RA(RG(RSHFT)), 33 15 17 18, 70)
-COMBO(r_hyper, &kp RC(RA(RG(RSHFT))), 33 15 16 17 18, 80)
-
 COMBO(capsword, &caps_word, 20 29, 50)
 COMBO(left_thumb, &mt LGUI ESC, 30 31, 80)
 COMBO(right_thumb, &kp DEL, 32 33, 80)
@@ -158,7 +132,7 @@ LAYER(Base,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		&kp Z         &kp X         &kp C         &kp V         &kp B       ,   &kp B         &kp N         &kp M         &mt RALT COMMA &mt RSHIFT DOT,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							&lt NAV SPACE &kp TAB         SMART_NUM     &lt SYM LANG1
+																							&lt NAV SPACE &mt LCTRL TAB   SMART_NUM     &lt SYM LANG1
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 	)
 
