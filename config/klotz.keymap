@@ -64,7 +64,15 @@ ZMK_HOLD_TAP(
 )
 
 ZMK_HOLD_TAP(
-	smart_num,
+	smart_num_mo,
+	bindings = <&mo>, <&num_word>;
+	flavor = "balanced";
+	tapping-term-ms = <200>;
+	quick-tap-ms = <QUICK_TAP_MS>;
+)
+
+ZMK_HOLD_TAP(
+	smart_num_kp,
 	bindings = <&mo>, <&num_word>;
 	flavor = "balanced";
 	tapping-term-ms = <200>;
@@ -142,7 +150,9 @@ MAKE_HRM(hmr, &kp, &kp, KEYS_L)
 /* ==== keymaps ==== */
 #define LAYER(NAME, LT, RT, LM, RM, LB, RB, TH)  ZMK_LAYER(NAME, LT RT LM RM LB RB TH)
 
-#define SMART_NUM &smart_num FUNC NUM
+// #define SMART_NUM &smart_num_mo FUNC NUM
+#define SMART_NUM &smart_num_kp RSHFT NUM
+
 LAYER(
   Base,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
