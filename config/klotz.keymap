@@ -84,7 +84,7 @@ ZMK_HOLD_TAP(
 #define THUMBS 30 31 32 33
 
 MAKE_HRM(hml, &kp, &kp, KEYS_R)
-MAKE_HRM(hmr, &kp, &kp, KEYS_L)587
+MAKE_HRM(hmr, &kp, &kp, KEYS_L)
 
 ZMK_CONDITIONAL_LAYER(mac_base_mode,  MAC_TOGGLE,       MAC_OVERLAY )
 ZMK_CONDITIONAL_LAYER(mac_nav_mode,   NAV MAC_TOGGLE,   MAC_NAV     )
