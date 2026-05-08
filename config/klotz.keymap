@@ -6,20 +6,26 @@
 #include <dt-bindings/zmk/outputs.h>
 
 /* ==== layers ==== */
-#define BASE         0
-#define NAV          1
-#define NUM          2
-#define SYM          3
-#define FUNC         4
-#define FUNC2        5
-#define SETTINGS     6
-#define MAC_TOGGLE   7
-#define MAC_OVERLAY  8
-#define MAC_NAV      9
-#define MAC_NUM     10
-#define MAC_SYM     11
-#define MAC_FUNC    12
-#define MAC_FUNC2   13
+#define BASE           0
+#define NAV            1
+#define NUM_RIGHT      2
+#define NUM_BOTH       3
+#define SYM            4
+#define FUNC           5
+#define FUNC2          6
+#define SETTINGS       7
+#define MAC_TOGGLE     8
+#define MAC_OVERLAY    9
+#define MAC_NAV       10
+#define MAC_NUM_RIGHT 11
+#define MAC_NUM_BOTH  12
+#define MAC_SYM       13
+#define MAC_FUNC      14
+#define MAC_FUNC2     15
+
+#define ALL_LAYERS \
+  BASE NAV NUM_RIGHT NUM_BOTH SYM FUNC FUNC2 SETTINGS \
+  MAC_TOGGLE MAC_OVERLAY MAC_NAV MAC_NUM_RIGHT MAC_NUM_BOTH MAC_SYM MAC_FUNC MAC_FUNC2
 
 /*==== config ====*/
 #define XXX &none
@@ -81,12 +87,13 @@ ZMK_HOLD_TAP(
 
 
 /*==== conditional layer ====*/ 
-ZMK_CONDITIONAL_LAYER(mac_base_mode,         MAC_TOGGLE,  MAC_OVERLAY)
-ZMK_CONDITIONAL_LAYER(mac_nav_mode,    NAV   MAC_TOGGLE,  MAC_NAV    )
-ZMK_CONDITIONAL_LAYER(mac_num_mode,    NUM   MAC_TOGGLE,  MAC_NUM    )
-ZMK_CONDITIONAL_LAYER(mac_sym_mode,    SYM   MAC_TOGGLE,  MAC_SYM    )
-ZMK_CONDITIONAL_LAYER(mac_func_mode,   FUNC  MAC_TOGGLE,  MAC_FUNC   )
-ZMK_CONDITIONAL_LAYER(mac_func2_mode,  FUNC2 MAC_TOGGLE,  MAC_FUNC2  )
+ZMK_CONDITIONAL_LAYER(mac_base_mode,                MAC_TOGGLE,  MAC_OVERLAY  )
+ZMK_CONDITIONAL_LAYER(mac_nav_mode,       NAV       MAC_TOGGLE,  MAC_NAV      )
+ZMK_CONDITIONAL_LAYER(mac_num_right_mode, NUM_RIGHT MAC_TOGGLE,  MAC_NUM_RIGHT)
+ZMK_CONDITIONAL_LAYER(mac_num_both_mode,  NUM_BOTH  MAC_TOGGLE,  MAC_NUM_BOTH )
+ZMK_CONDITIONAL_LAYER(mac_sym_mode,       SYM       MAC_TOGGLE,  MAC_SYM      )
+ZMK_CONDITIONAL_LAYER(mac_func_mode,      FUNC      MAC_TOGGLE,  MAC_FUNC     )
+ZMK_CONDITIONAL_LAYER(mac_func2_mode,     FUNC2     MAC_TOGGLE,  MAC_FUNC2    )
 
 
 /*==== macros ====*/ 
@@ -117,10 +124,6 @@ ZMK_MACRO(m_vsc_mov_up, bindings = <&kp LG(K) &kp LG(UP)>;)
   │  20  21  22  23  24 │ │  25  26  27  28  29 │
   ╰────────────╮ 30  31 │ │  32  33 ╭───────────╯
                ╰────────╯ ╰─────────╯            */
-
-#define ALL_LAYERS \
-  BASE NAV NUM SYM FUNC FUNC2 SETTINGS \
-  MAC_TOGGLE MAC_OVERLAY MAC_NAV MAC_NUM MAC_SYM MAC_FUNC MAC_FUNC2
 
 ZMK_COMBO(left_thumb,  &mt LGUI ESC,    30 31,    ALL_LAYERS, 80)
 ZMK_COMBO(right_thumb, &kp DEL,         32 33,    ALL_LAYERS, 80)
@@ -160,22 +163,23 @@ LAYER(
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		&kp Q         &kp W         &kp E         &kp R         &kp T       ,   &kp Y         &kp U         &kp I         &kp O         &kp SLASH   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		&kp A         &hml LSHFT S  &hml LALT D   &hml LCTRL F  &hml LGUI G ,   &hmr LGUI H   &hmr LCTRL J  &hmr LALT K   &hmr LSHFT L  &kp P       ,
+		&kp A         &kp S         &kp D         &kp F         &kp G       ,   &kp H         &kp J         &kp K         &kp L         &kp P       ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		&kp Z         &kp X         &kp C         &kp V         &kp B       ,   &kp B         &kp N         &kp M         &kp COMMA     &kp DOT     ,
+		&kp Z         &hml LSHFT X  &hml LALT C   &hml LCTRL V  &hml LGUI B ,   &hmr RGUI B   &hmr RCTRL N  &hmr RALT M   &hmr RSHFT COMMA &kp DOT  ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							&lt SYM SPACE &mt LCTRL TAB   SMART_NUM     &lt NAV LANG1
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
+//TODO: add some keys for nav
 LAYER(
   Nav,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		XXX           XXX           XXX           XXX           XXX         ,   &kp ESC       &kp TAB       &kp ENTER     &kp BACKSPACE &kp DEL     ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		XXX           &kp LSHFT     &kp LALT      &kp LCTRL     &kp LGUI    ,   &kp SPACE     &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT   ,
+		XXX           XXX           XXX           XXX           XXX         ,   &kp SPACE     &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		XXX           XXX           XXX           XXX           XXX         ,   &kp LS(LG(S)) &kp HOME      &kp PAGE_DOWN &kp PAGE_UP   &kp END     ,
+		XXX           &kp LSHFT     &kp LALT      &kp LCTRL     &kp LGUI    ,   &kp LS(LG(S)) &kp HOME      &kp PAGE_DOWN &kp PAGE_UP   &kp END     ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							___           ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
@@ -213,7 +217,7 @@ LAYER(
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
     &kp LC(W)	    &kp LC(PG_UP) &vsc_fcs_up   &kp LC(PG_DN) XXX         ,   XXX           &kp F9        &kp F10       &kp F11	      &kp F12     ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-	  &mo FUNC2     &vsc_fcs_lf   &vsc_fcs_dn   &vsc_fcs_ri   XXX         ,   XXX           &kp F5        &kp F6	      &kp F7        &kp F8      ,
+    &mo FUNC2     &vsc_fcs_lf   &vsc_fcs_dn   &vsc_fcs_ri   XXX         ,   XXX           &kp F5        &kp F6	      &kp F7        &kp F8      ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     XXX 	        &kp LC(T)     &kp LC(N)     &kp LC(LS(N)) XXX         ,   XXX           &kp F1        &kp F2        &kp F3        &kp F4      ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
@@ -266,9 +270,9 @@ LAYER(
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		___           ___           ___           &hml LGUI F   &hml LCTRL G,   &hmr LCTRL H  &hmr LGUI J   ___           ___           ___         ,
+    ___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
+    ___           ___           ___           &hml LGUI V   &hml LCTRL B,   &hmr LCTRL B  &hmr LGUI N   ___           ___           ___         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							___           &mt LGUI TAB    ___           &lt NAV F18
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
@@ -279,9 +283,9 @@ LAYER(
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		___           ___           ___           &kp LGUI      &kp LCTRL   ,   ___           ___           ___           ___           ___         ,
+    ___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
+    ___           ___           ___           &kp LGUI      &kp LCTRL   ,   ___           ___           ___           ___           ___         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							___           ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
