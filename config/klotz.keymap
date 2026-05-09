@@ -143,10 +143,9 @@ ZMK_COMBO(mac_toggle,  &tog MAC_TOGGLE,  0  1  2, ALL_LAYERS, 100)
 #define MAKE_HRM(NAME, HOLD, TAP, TRIGGER_POS) \
   ZMK_HOLD_TAP( \
 		NAME, bindings = <HOLD>, <TAP>; \
-    flavor = "balanced"; \
+    flavor = "tap-preferred"; \
     tapping-term-ms = <TAPPING_TERM_MS>; \
     quick-tap-ms = <QUICK_TAP_MS>; \
-		require-prior-idle-ms = <150>; \
 		hold-trigger-key-positions = <TRIGGER_POS>; \
 	)
 
@@ -174,7 +173,7 @@ LAYER(
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		&kp A         &kp S         &kp D         &kp F         &kp G       ,   &kp H         &kp J         &kp K         &kp L         &kp P       ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		&kp Z         &mt LSHFT X   &mt LALT C    &mt LCTRL V   &mt LGUI B  ,   &mt RGUI B    &mt RCTRL N   &mt RALT M   &mt RSHFT COMMA &kp DOT   ,
+		&kp Z         &hml LSHFT X  &hml LALT C   &hml LCTRL V  &hml LGUI B ,   &hmr RGUI B   &hmr RCTRL N  &hmr RALT M   &hmr RSHFT COMMA &kp DOT  ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							&lt SYM SPACE &mt LCTRL TAB   &mt RSHFT ESC &lt NAV LANG1
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
