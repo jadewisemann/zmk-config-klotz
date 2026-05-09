@@ -90,7 +90,7 @@ ZMK_HOLD_TAP(
 )
 
 
-/*==== conditional layer ====*/ 
+/*==== conditional layer ====*/
 ZMK_CONDITIONAL_LAYER(mac_base_mode,                MAC_TOGGLE,  MAC_OVERLAY  )
 ZMK_CONDITIONAL_LAYER(mac_nav_mode,       NAV       MAC_TOGGLE,  MAC_NAV      )
 ZMK_CONDITIONAL_LAYER(mac_num_right_mode, NUM_RIGHT MAC_TOGGLE,  MAC_NUM_RIGHT)
@@ -100,7 +100,7 @@ ZMK_CONDITIONAL_LAYER(mac_func_mode,      FUNC      MAC_TOGGLE,  MAC_FUNC     )
 ZMK_CONDITIONAL_LAYER(mac_func2_mode,     FUNC2     MAC_TOGGLE,  MAC_FUNC2    )
 
 
-/*==== macros ====*/ 
+/*==== macros ====*/
 ZMK_MACRO(vsc_fcs_lf, bindings = <&kp LC(K) &kp LC(LEFT)>;)
 ZMK_MACRO(vsc_fcs_dn, bindings = <&kp LC(K) &kp LC(DOWN)>;)
 ZMK_MACRO(vsc_fcs_ri, bindings = <&kp LC(K) &kp LC(RIGHT)>;)
@@ -166,6 +166,7 @@ MAKE_HRM(hmr, &kp, &kp, KEYS_L HRM_MODS_R)
 // #define SMART_NUM &smart_num_mo FUNC NUM
 #define SMART_NUM &smart_num_kp RSHFT NUM_RIGHT
 
+
 LAYER(
   Base,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
@@ -173,7 +174,7 @@ LAYER(
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		&kp A         &kp S         &kp D         &kp F         &kp G       ,   &kp H         &kp J         &kp K         &kp L         &kp P       ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		&kp Z         &mt LSHFT X   &hml LALT C   &hml LCTRL V  &hml LGUI B ,   &hmr RGUI B   &hmr RCTRL N  &hmr RALT M   &mt RSHFT COMMA &kp DOT   ,
+		&kp Z         &mt LSHFT X   &mt LALT C    &mt LCTRL V   &mt LGUI B  ,   &mt RGUI B    &mt RCTRL N   &mt RALT M   &mt RSHFT COMMA &kp DOT   ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							&lt SYM SPACE &mt LCTRL TAB   &mt RSHFT ESC &lt NAV LANG1
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
@@ -191,7 +192,7 @@ LAYER(
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							___           ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
-) 
+)
 
 LAYER(
   NumRight,
