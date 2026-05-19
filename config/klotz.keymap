@@ -8,24 +8,20 @@
 /* ==== layers ==== */
 #define BASE           0
 #define NAV            1
-#define NUM_RIGHT      2
-#define NUM_BOTH       3
-#define SYM            4
-#define FUNC           5
-#define FUNC2          6
-#define SETTINGS       7
-#define MAC_TOGGLE     8
-#define MAC_OVERLAY    9
-#define MAC_NAV       10
-#define MAC_NUM_RIGHT 11
-#define MAC_NUM_BOTH  12
-#define MAC_SYM       13
-#define MAC_FUNC      14
-#define MAC_FUNC2     15
+#define NUM            2
+#define SYM            3
+#define FUNC           4
+#define SETTINGS       5
+#define MAC_TOGGLE     6
+#define MAC_OVERLAY    7
+#define MAC_NAV        8
+#define MAC_NUM        9
+#define MAC_SYM       10
+#define MAC_FUNC      11
 
 #define ALL_LAYERS \
-  BASE NAV NUM_RIGHT NUM_BOTH SYM FUNC FUNC2 SETTINGS \
-  MAC_TOGGLE MAC_OVERLAY MAC_NAV MAC_NUM_RIGHT MAC_NUM_BOTH MAC_SYM MAC_FUNC MAC_FUNC2
+  BASE NAV NUM SYM FUNC SETTINGS \
+  MAC_TOGGLE MAC_OVERLAY MAC_NAV MAC_NUM MAC_SYM MAC_FUNC
 
 /*==== config ====*/
 #define XXX &none
@@ -36,6 +32,7 @@
 #define TAPPING_TERM_MS   135
 #define STICKY_RELEASE_MS 2000
 
+
 &sk {
   release-after-ms = <STICKY_RELEASE_MS>;
   quick-release;
@@ -43,8 +40,8 @@
 };
 
 &mt {
-  quick-tap-ms = <QUICK_TAP_MS>;
   flavor = "tap-preferred";
+  quick-tap-ms = <QUICK_TAP_MS>;
   tapping-term-ms = <TAPPING_TERM_MS>;
 };
 
@@ -57,9 +54,21 @@
 	ignore-modifiers;
 };
 
+
+#define MAKE_HRM(NAME, HOLD, TAP, TRIGGER_POS) \
+  ZMK_HOLD_TAP( \
+		NAME, bindings = <HOLD>, <TAP>; \
+    flavor = "tap-preferred"; \
+    quick-tap-ms = <QUICK_TAP_MS>; \
+    tapping-term-ms = <TAPPING_TERM_MS>; \
+		hold-trigger-key-positions = <TRIGGER_POS>; \
+    require-prior-idle-ms = <125>; \
+    hold-trigger-on-release; \
+	)
+
 /*==== custom hold-tab =====*/
 ZMK_HOLD_TAP(
-	qt,
+  qt,
 	bindings = <&kp>, <&kp>;
 	flavor = "hold-preferred";
 	tapping-term-ms = <200>;
@@ -89,36 +98,41 @@ ZMK_HOLD_TAP(
 	quick-tap-ms = <QUICK_TAP_MS>;
 )
 
+ZMK_HOLD_TAP(
+  mo_sk,
+  bindings = <&mo>, <&sk>;
+  flavor = "hold-preferred";
+  tapping-term-ms = <200>;
+  quick-tap-ms = <200>;
+)
+
+ZMK_HOLD_TAP(
+  as,
+  bindings = <&kp>, <&kp>;
+  flavor = "tap-preferred";
+  tapping-term-ms = <TAPPING_TERM_MS>;
+  quick-tap-ms = <QUICK_TAP_MS>;
+  require-prior-idle-ms = <125>;
+)
+
+ZMK_HOLD_TAP(
+  sl_mo,
+  bindings = <&mo>, <&sl>;
+  flavor = "balanced";
+  tapping-term-ms = <TAPPING_TERM_MS>;
+  quick-tap-ms = <QUICK_TAP_MS>;
+)
 
 /*==== conditional layer ====*/
 ZMK_CONDITIONAL_LAYER(mac_base_mode,                MAC_TOGGLE,  MAC_OVERLAY  )
 ZMK_CONDITIONAL_LAYER(mac_nav_mode,       NAV       MAC_TOGGLE,  MAC_NAV      )
-ZMK_CONDITIONAL_LAYER(mac_num_right_mode, NUM_RIGHT MAC_TOGGLE,  MAC_NUM_RIGHT)
-ZMK_CONDITIONAL_LAYER(mac_num_both_mode,  NUM_BOTH  MAC_TOGGLE,  MAC_NUM_BOTH )
+ZMK_CONDITIONAL_LAYER(mac_num,            NUM       MAC_TOGGLE,  MAC_NUM)
 ZMK_CONDITIONAL_LAYER(mac_sym_mode,       SYM       MAC_TOGGLE,  MAC_SYM      )
 ZMK_CONDITIONAL_LAYER(mac_func_mode,      FUNC      MAC_TOGGLE,  MAC_FUNC     )
-ZMK_CONDITIONAL_LAYER(mac_func2_mode,     FUNC2     MAC_TOGGLE,  MAC_FUNC2    )
 
 
 /*==== macros ====*/
-ZMK_MACRO(vsc_fcs_lf, bindings = <&kp LC(K) &kp LC(LEFT)>;)
-ZMK_MACRO(vsc_fcs_dn, bindings = <&kp LC(K) &kp LC(DOWN)>;)
-ZMK_MACRO(vsc_fcs_ri, bindings = <&kp LC(K) &kp LC(RIGHT)>;)
-ZMK_MACRO(vsc_fcs_up, bindings = <&kp LC(K) &kp LC(UP)>;)
-ZMK_MACRO(vsc_mov_lf, bindings = <&kp LC(K) &kp LEFT>;)
-ZMK_MACRO(vsc_mov_dn, bindings = <&kp LC(K) &kp DOWN>;)
-ZMK_MACRO(vsc_mov_ri, bindings = <&kp LC(K) &kp RIGHT>;)
-ZMK_MACRO(vsc_mov_up, bindings = <&kp LC(K) &kp UP>;)
-
-ZMK_MACRO(m_vsc_fcs_lf, bindings = <&kp LG(K) &kp LG(LEFT)>;)
-ZMK_MACRO(m_vsc_fcs_dn, bindings = <&kp LG(K) &kp LG(DOWN)>;)
-ZMK_MACRO(m_vsc_fcs_ri, bindings = <&kp LG(K) &kp LG(RIGHT)>;)
-ZMK_MACRO(m_vsc_fcs_up, bindings = <&kp LG(K) &kp LG(UP)>;)
-ZMK_MACRO(m_vsc_mov_lf, bindings = <&kp LG(K) &kp LG(LEFT)>;)
-ZMK_MACRO(m_vsc_mov_dn, bindings = <&kp LG(K) &kp LG(DOWN)>;)
-ZMK_MACRO(m_vsc_mov_ri, bindings = <&kp LG(K) &kp LG(RIGHT)>;)
-ZMK_MACRO(m_vsc_mov_up, bindings = <&kp LG(K) &kp LG(UP)>;)
-
+// ZMK_MACRO(macro_name, bindings = <&kp LC(K) &kp LC(LEFT)>;)
 
 /* ==== combos ==== */
 /*                KEY POSITIONS
@@ -129,55 +143,67 @@ ZMK_MACRO(m_vsc_mov_up, bindings = <&kp LG(K) &kp LG(UP)>;)
   ╰────────────╮ 30  31 │ │  32  33 ╭───────────╯
                ╰────────╯ ╰─────────╯            */
 
-#define SMART_NUM_BOTH &smart_num_mo NUM_BOTH NUM_BOTH
 
 // ZMK_COMBO(left_thumb,      &mt LGUI ESC,    30 31,    ALL_LAYERS, 80)
 // ZMK_COMBO(right_thumb,     &kp DEL,         32 33,    ALL_LAYERS, 80)
-ZMK_COMBO(outer_thumb,     &mo SETTINGS,    31 32,    ALL_LAYERS, 200)
-ZMK_COMBO(smart_num_both,  SMART_NUM_BOTH,  30 33,    ALL_LAYERS, 80)
+ZMK_COMBO(outer_thumb,  &mo SETTINGS, 31 32,    ALL_LAYERS, 200)
+ZMK_COMBO(inner_thumb,  &mo SYM,      30 33,    ALL_LAYERS, 80)
 
 ZMK_COMBO(mac_toggle,  &tog MAC_TOGGLE,  0  1  2, ALL_LAYERS, 100)
 
+// vertical > top
+ZMK_COMBO(lt,   &kp LT,   1 11, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(lbrc, &kp LBRC, 2 12, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(lpar, &kp LPAR, 3 13, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(lbkt, &kp LBKT, 4 14, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(rbkt, &kp RBKT, 5 15, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(rpar, &kp RPAR, 6 16, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(rbrc, &kp RBRC, 7 17, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(gt,   &kp GT,   8 18, BASE MAC_OVERLAY, 50)
+// horizontal > left (left to right)
+ZMK_COMBO(equal, &kp EQUAL,   1  2, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(plus,  &kp PLUS,    2  3, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(grave, &kp GRAVE,  11 12, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(tilde, &kp TILDE,  12 13, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(bslh,  &kp BSLH,   21 22, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(pipe,  &kp PIPE,   22 23, BASE MAC_OVERLAY, 50)
+// horizontal > right (left to right)
+ZMK_COMBO(colon, &kp COLON,  6  7, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(semi,  &kp SEMI,   7  8, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(minus, &kp MINUS, 16 17, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(under, &kp UNDER, 17 18, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(sqt,   &kp SQT,   26 27, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(dqt,   &kp DQT,   27 28, BASE MAC_OVERLAY, 50)
 
 /*==== home row mod =====*/
-#define MAKE_HRM(NAME, HOLD, TAP, TRIGGER_POS) \
-  ZMK_HOLD_TAP( \
-		NAME, bindings = <HOLD>, <TAP>; \
-    flavor = "tap-preferred"; \
-    tapping-term-ms = <TAPPING_TERM_MS>; \
-    quick-tap-ms = <QUICK_TAP_MS>; \
-		hold-trigger-key-positions = <TRIGGER_POS>; \
-	)
-
 #define KEYS_L 0 1 2 3 4 10 11 12 13 14 20 21 22 23 24
 #define KEYS_R 5 6 7 8 9 15 16 17 18 19 25 26 27 28 29
-#define HRM_MODS_L 21 22 23 24
-#define HRM_MODS_R 25 26 27 28
+#define HRM_MODS_L 10 11
+#define HRM_MODS_R 18 19 
 #define THUMBS 30 31 32 33
 
-MAKE_HRM(hml, &kp, &kp, KEYS_R HRM_MODS_L)
-MAKE_HRM(hmr, &kp, &kp, KEYS_L HRM_MODS_R)
-
+MAKE_HRM(hml, &kp, &kp, KEYS_R THUMBS)
+MAKE_HRM(hmr, &kp, &kp, KEYS_L)
 
 /* ==== keymaps ==== */
 #define LAYER(NAME, LT, RT, LM, RM, LB, RB, TH)  ZMK_LAYER(NAME, LT RT LM RM LB RB TH)
 
 // #define SMART_NUM &smart_num_mo FUNC NUM
-#define SMART_NUM &smart_num_kp RSHFT NUM_RIGHT
-
+// #define SMART_NUM &smart_num_kp RSHFT NUM_RIGHT
 
 LAYER(
   Base,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		&kp Q         &kp W         &kp E         &kp R         &kp T       ,   &kp Y         &kp U         &kp I         &kp O         &kp SLASH   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		&kp A         &kp S         &kp D         &kp F         &kp G       ,   &kp H         &kp J         &kp K         &kp L         &kp P       ,
+		&hml LSHFT A  &hml LALT S   &kp D         &kp F         &kp G       ,   &kp H         &kp J         &kp K         &hmr RALT L   &hmr RSHFT P,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		&kp Z         &hml LSHFT X  &hml LALT C   &hml LCTRL V  &hml LGUI B ,   &hmr RGUI B   &hmr RCTRL N  &hmr RALT M   &hmr RSHFT COMMA &kp DOT  ,
+		&kp Z         &kp X         &kp C         &kp V         &kp B       ,   &kp B         &kp N         &kp M         &kp COMMA     &kp DOT     ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							&lt SYM SPACE &mt LCTRL TAB   &mt RSHFT ESC &lt NAV LANG1
+																							&lt NAV SPACE &mt LCTRL TAB   &sl_mo FUNC FUNC &lt NUM LANG1
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
+
 
 //TODO: add some keys for nav
 LAYER(
@@ -185,38 +211,25 @@ LAYER(
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		XXX           XXX           XXX           XXX           XXX         ,   &kp ESC       &kp TAB       &kp ENTER     &kp BACKSPACE &kp DEL     ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		XXX           XXX           XXX           XXX           XXX         ,   &kp SPACE     &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT   ,
+    &kp LSHFT     &kp LALT      &sk LCTRL     &sk LGUI      XXX         ,   &kp SPACE     &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		XXX           &kp LSHFT     &kp LALT      &kp LCTRL     &kp LGUI    ,   &kp LS(LG(S)) &kp HOME      &kp PAGE_DOWN &kp PAGE_UP   &kp END     ,
+    XXX           XXX           XXX           XXX           XXX         ,   &kp LS(LG(S)) &kp HOME      &kp PAGE_DOWN &kp PAGE_UP   &kp END     ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							___           ___             ___           ___
-//                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
-)
-
-LAYER(
-  NumRight,
-//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-		___           ___           ___           ___           ___         ,   XXX           &kp N7        &kp N8        &kp N9        XXX         ,
-//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		___           ___           ___           ___           ___         ,   XXX           &kp N4        &kp N5        &kp N6        &kp ENTER   ,
-//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		___           ___           ___           ___           ___         ,   XXX           &kp N1        &kp N2        &kp N3        &kp DOT     ,
-//╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							___           ___             ___           &kp N0
+																							___           ___             ___           &mo SYM
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
 
 LAYER(
-  NumBoth,
+  Num,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-		___           ___           ___           ___           ___        	,   ___           ___           ___           &kp ENTER     ___  	      ,
+    XXX           &kp N7        &kp N8        &kp N9        &kp ENTER   ,   ___           ___           ___           ___           ___         ,   
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		&kp N1        &kp N2        &kp N3        &kp N4        &kp N5      ,   &kp N6        &kp N7        &kp N8        &kp N9        &kp N0      ,
+    &kp N0        &kp N4        &kp N5        &kp N6        &kp DOT     ,   ___           &sk RGUI      &sk RCTRL     &kp RALT      &kp RSHFT   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		___           &kp LSHFT     &kp LALT      &kp LCTRL     &kp LGUI    ,   &kp RGUI      &kp RCTRL     &kp RALT      &kp RSHFT     &kp DOT     ,
+    XXX           &kp N1        &kp N2        &kp N3        XXX         ,   ___           ___           ___           ___           ___         ,   
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							___           ___             ___           ___
+																							&mo SYM        ___            ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
@@ -228,7 +241,7 @@ LAYER(
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     &kp GRAVE	    &kp LT        &kp LBRC      &kp LPAR      &kp LBKT    ,   &kp RBKT      &kp RPAR      &kp RBRC	    &kp GT        &kp TILDE   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		&kp EXCL      &kp AT_SIGN   &kp HASH      &kp DOLLAR    &caps_word  ,   &kp RCTRL     &kp PERCENT   &kp CARET     &kp AMPERSAND &kp ASTERISK,
+		&kp EXCL      &kp AT_SIGN   &kp HASH      &kp DOLLAR    ___         ,   ___           &kp PERCENT   &kp CARET     &kp AMPERSAND &kp ASTERISK,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							___           ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
@@ -237,28 +250,16 @@ LAYER(
 LAYER(
   Func,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-    &kp LC(W)	    &kp LC(PG_UP) &vsc_fcs_up   &kp LC(PG_DN) XXX         ,   XXX           &kp F9        &kp F10       &kp F11	      &kp F12     ,
+		___           &kp F9        &kp F10       &kp F11       &kp F12     ,   ___           ___           ___           ___           ___  	      ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-    &mo FUNC2     &vsc_fcs_lf   &vsc_fcs_dn   &vsc_fcs_ri   XXX         ,   XXX           &kp F5        &kp F6	      &kp F7        &kp F8      ,
+		___           &kp F5        &kp F6        &kp F7        &kp F8      ,   ___           ___           ___           ___           ___  	      ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-    XXX 	        &kp LC(T)     &kp LC(N)     &kp LC(LS(N)) XXX         ,   XXX           &kp F1        &kp F2        &kp F3        &kp F4      ,
+		___           &kp F1        &kp F2        &kp F3        &kp F4      ,   ___           ___           ___           ___           ___  	      ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							___           ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
-LAYER(
-  Func2,
-//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-		XXX           ___           &vsc_mov_up   ___           XXX         ,   XXX           XXX           XXX           XXX           XXX         ,
-//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		XXX           &vsc_mov_lf   &vsc_mov_dn   &vsc_mov_ri   XXX         ,   XXX           XXX           XXX           XXX           XXX         ,
-//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		XXX           XXX           XXX           XXX           XXX         ,   XXX           XXX           XXX           XXX           XXX         ,
-//╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							___           ___             ___           ___
-//                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
-)
 
 #define UNLOCK &studio_unlock
 LAYER(
@@ -273,6 +274,7 @@ LAYER(
 																							XXX           XXX             XXX           XXX
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
+
 
 LAYER(
   MacToggle,
@@ -291,11 +293,11 @@ LAYER(
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-    ___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
+		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-    ___           ___           ___           &hml LGUI V   &hml LCTRL B,   &hmr LCTRL B  &hmr LGUI N   ___           ___           ___         ,
+    ___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							___           &mt LGUI TAB    ___           &lt NAV F18
+																							___           &mt LGUI TAB    ___           &lt NUM F18
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
@@ -304,16 +306,16 @@ LAYER(
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-    ___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
+    ___           ___           &sk LGUI      &sk LCTRL     ___         ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-    ___           ___           ___           &kp LGUI      &kp LCTRL   ,   ___           ___           ___           ___           ___         ,
+    ___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							___           ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
 LAYER(
-  MacNumRight,
+  MacNum,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
@@ -327,21 +329,8 @@ LAYER(
 
 
 LAYER(
-  MacNumBoth,
-//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
-//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		___           ___           ___           ___           ___   	    ,   ___           ___           ___           ___           ___         ,
-//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-    ___           ___           ___           &kp LGUI      &kp LCTRL   ,   &kp LCTRL     &kp LGUI      ___           ___           ___         ,
-//╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							___           ___             ___           ___
-//                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
-)
-
-LAYER(
   MacSym,
-//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬────p─────────┬─────────────┬─────────────╮
 		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		___           ___           ___           ___           ___   	    ,   ___           ___           ___           ___           ___         ,
@@ -354,19 +343,6 @@ LAYER(
 
 LAYER(
   MacFunc,
-//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
-//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		___           ___           ___           ___           ___   	    ,   ___           ___           ___           ___           ___         ,
-//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
-//╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							___           ___             ___           ___
-//                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
-)
-
-LAYER(
-  MacFunc2,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
