@@ -46,8 +46,8 @@
 };
 
 &mt {
-  quick-tap-ms = <QUICK_TAP_MS>;
   flavor = "tap-preferred";
+  quick-tap-ms = <QUICK_TAP_MS>;
   tapping-term-ms = <TAPPING_TERM_MS>;
 };
 
@@ -59,6 +59,17 @@
 &num_word {
 	ignore-modifiers;
 };
+
+
+#define MAKE_HRM(NAME, HOLD, TAP, TRIGGER_POS) \
+  ZMK_HOLD_TAP( \
+		NAME, bindings = <HOLD>, <TAP>; \
+    flavor = "tap-preferred"; \
+    quick-tap-ms = <QUICK_TAP_MS>; \
+    tapping-term-ms = <TAPPING_TERM_MS>; \
+		hold-trigger-key-positions = <TRIGGER_POS>; \
+	)
+
 
 /*==== custom hold-tab =====*/
 ZMK_HOLD_TAP(
@@ -150,19 +161,12 @@ ZMK_COMBO(mac_toggle,  &tog MAC_TOGGLE,  0  1  2, ALL_LAYERS, 100)
 
 
 /*==== home row mod =====*/
-#define MAKE_HRM(NAME, HOLD, TAP, TRIGGER_POS) \
-  ZMK_HOLD_TAP( \
-		NAME, bindings = <HOLD>, <TAP>; \
-    flavor = "tap-preferred"; \
-    tapping-term-ms = <TAPPING_TERM_MS>; \
-    quick-tap-ms = <QUICK_TAP_MS>; \
-		hold-trigger-key-positions = <TRIGGER_POS>; \
-	)
+
 
 #define KEYS_L 0 1 2 3 4 10 11 12 13 14 20 21 22 23 24
 #define KEYS_R 5 6 7 8 9 15 16 17 18 19 25 26 27 28 29
-#define HRM_MODS_L 21 22 23 24
-#define HRM_MODS_R 25 26 27 28
+#define HRM_MODS_L 10 11
+#define HRM_MODS_R 18 19 
 #define THUMBS 30 31 32 33
 
 MAKE_HRM(hml, &kp, &kp, KEYS_R HRM_MODS_L)
@@ -182,7 +186,7 @@ LAYER(
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		&kp Q         &kp W         &kp E         &kp R         &kp T       ,   &kp Y         &kp U         &kp I         &kp O         &kp SLASH   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		&mt LSHFT A   &mt LALT S    &kp D         &kp F         &kp G       ,   &kp H         &kp J         &kp K         &mt RALT L    &mt RSHFT P ,
+		&hml LSHFT A  &hml LALT S   &kp D         &kp F         &kp G       ,   &kp H         &kp J         &kp K         &hmr RALT L   &hmr RSHFT P,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		&kp Z         &kp X         &kp C         &kp V         &kp B       ,   &kp B         &kp N         &kp M         &kp COMMA     &kp DOT     ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
@@ -316,8 +320,8 @@ LAYER(
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-    &kp LSHFT     &kp LALT      &kp LGUI      &kp LCTRL     XXX         ,   ___           ___           ___           ___           ___         ,
-//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────l┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+		___           ___           ___           ___           ___  	      ,   ___           ___           ___           ___           ___         ,
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     ___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							___           &mt LGUI TAB    ___           &lt SYM F18
