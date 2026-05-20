@@ -159,10 +159,44 @@ ZMK_COMBO(inner_thumb,  &mo SYM,      30 33,    ALL_LAYERS, 80)
 
 ZMK_COMBO(mac_toggle,  &tog MAC_TOGGLE,  0  1  2, ALL_LAYERS, 100)
 
+// vertical > bottom
+ZMK_COMBO(excl,      &kp EXCL,      11 21, ALL_LAYERS, 50)
+ZMK_COMBO(at_sign,   &kp AT_SIGN,   12 22, ALL_LAYERS, 50)
+ZMK_COMBO(hash,      &kp HASH,      13 23, ALL_LAYERS, 50)
+ZMK_COMBO(dollar,    &kp DOLLAR,    14 24, ALL_LAYERS, 50)
+ZMK_COMBO(percent,   &kp PERCENT,   15 25, ALL_LAYERS, 50)
+ZMK_COMBO(caret,     &kp CARET,     16 26, ALL_LAYERS, 50)
+ZMK_COMBO(ameprsand, &kp AMPERSAND, 17 27, ALL_LAYERS, 50)
+ZMK_COMBO(asterisk,  &kp ASTERISK,  18 28, ALL_LAYERS, 50)
+
+// vertical > bottom
+ZMK_COMBO(lt,   &kp LT,   1 11, ALL_LAYERS, 50)
+ZMK_COMBO(lbrc, &kp LBRC, 2 12, ALL_LAYERS, 50)
+ZMK_COMBO(lpar, &kp LPAR, 3 13, ALL_LAYERS, 50)
+ZMK_COMBO(lbkt, &kp LBKT, 4 14, ALL_LAYERS, 50)
+ZMK_COMBO(rbkt, &kp RBKT, 5 15, ALL_LAYERS, 50)
+ZMK_COMBO(rpar, &kp RPAR, 6 16, ALL_LAYERS, 50)
+ZMK_COMBO(rbrc, &kp RBRC, 7 17, ALL_LAYERS, 50)
+ZMK_COMBO(gt,   &kp GT,   8 18, ALL_LAYERS, 50)
+
+
+// horizontal > left (left to right)
+ZMK_COMBO(equal, &kp EQUAL,   1  2, ALL_LAYERS, 50)
+ZMK_COMBO(plus,  &kp PLUS,    2  3, ALL_LAYERS, 50)
+ZMK_COMBO(grave, &kp GRAVE,  11 12, ALL_LAYERS, 50)
+ZMK_COMBO(tilde, &kp TILDE,  12 13, ALL_LAYERS, 50)
+ZMK_COMBO(bslh,  &kp BSLH,   21 22, ALL_LAYERS, 50)
+ZMK_COMBO(pipe,  &kp PIPE,   22 23, ALL_LAYERS, 50)
+
+// horizontal > right (left to right)
+ZMK_COMBO(colon, &kp COLON,  6  7, ALL_LAYERS, 50)
+ZMK_COMBO(semi,  &kp SEMI,   7  8, ALL_LAYERS, 50)
+ZMK_COMBO(minus, &kp MINUS, 16 17, ALL_LAYERS, 50)
+ZMK_COMBO(under, &kp UNDER, 17 18, ALL_LAYERS, 50)
+ZMK_COMBO(sqt,   &kp SQT,   26 27, ALL_LAYERS, 50)
+ZMK_COMBO(dqt,   &kp DQT,   27 28, ALL_LAYERS, 50)
 
 /*==== home row mod =====*/
-
-
 #define KEYS_L 0 1 2 3 4 10 11 12 13 14 20 21 22 23 24
 #define KEYS_R 5 6 7 8 9 15 16 17 18 19 25 26 27 28 29
 #define HRM_MODS_L 10 11
@@ -178,7 +212,7 @@ MAKE_HRM(hmr, &kp, &kp, KEYS_L HRM_MODS_R)
 
 // #define SMART_NUM &smart_num_mo FUNC NUM
 #define SMART_NUM &smart_num_kp RSHFT NUM_LEFT
-#define MO_SK &mo_sk NUM_LEFT LSHFT
+#define MO_SK &mo_sk FUNC LSHFT
 
 
 LAYER(
@@ -190,7 +224,7 @@ LAYER(
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		&kp Z         &kp X         &kp C         &kp V         &kp B       ,   &kp B         &kp N         &kp M         &kp COMMA     &kp DOT     ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							&lt NAV SPACE &mt LCTRL TAB   MO_SK         &lt SYM LANG1
+																							&lt NAV SPACE &mt LCTRL TAB   MO_SK      &lt NUM_LEFT LANG1
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
@@ -231,7 +265,7 @@ LAYER(
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     &kp DOT       &kp N1        &kp N2        &kp N3        XXX         ,   ___           ___           ___           ___           ___         ,   
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							&kp N0        ___             ___           ___
+																							&lt NAV N0    ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
@@ -243,7 +277,7 @@ LAYER(
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		&kp N1        &kp N2        &kp N3        &kp N4        &kp N5      ,   &kp N6        &kp N7        &kp N8        &kp N9        &kp N0      ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-	  &kp LSHFT     &kp LALT      &kp LCTRL     &kp LGUI      ___         ,   ___           &kp RGUI      &kp RCTRL     &kp RALT      &kp RSHFT   ,
+		___           ___           ___           ___           ___        	,   ___           ___           ___           &kp COMMA     &kp DOT  	  ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							___           ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
