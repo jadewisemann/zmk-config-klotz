@@ -211,7 +211,7 @@ MAKE_HRM(hmr, &kp, &kp, KEYS_L)
 #define LAYER(NAME, LT, RT, LM, RM, LB, RB, TH)  ZMK_LAYER(NAME, LT RT LM RM LB RB TH)
 
 // #define SMART_NUM &smart_num_mo FUNC NUM
-#define SMART_NUM &smart_num_kp RSHFT NUM_LEFT
+#define SMART_NUM &smart_num_kp RSHFT NUM_RIGHT
 #define MO_SK &mo_sk FUNC LSHFT
 
 LAYER(
@@ -223,7 +223,7 @@ LAYER(
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		&kp Z         &kp X         &kp C         &kp V         &kp B       ,   &kp B         &kp N         &kp M         &kp COMMA     &kp DOT     ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							&lt NAV SPACE &mt LCTRL TAB   MO_SK         &lt NUM_BOTH LANG1
+																							&lt NAV SPACE &mt LCTRL TAB   SMART_NUM     &lt NUM_BOTH LANG1
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
