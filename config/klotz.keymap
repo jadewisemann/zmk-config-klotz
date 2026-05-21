@@ -112,6 +112,15 @@ ZMK_HOLD_TAP(
   quick-tap-ms = <200>;
 )
 
+ZMK_HOLD_TAP(
+  as,
+  bindings = <&kp>, <&kp>;
+  flavor = "tap-preferred";
+  tapping-term-ms = <200>;
+  quick-tap-ms = <QUICK_TAP_MS>;
+    require-prior-idle-ms = <125>;
+)
+
 /*==== conditional layer ====*/
 ZMK_CONDITIONAL_LAYER(mac_base_mode,                MAC_TOGGLE,  MAC_OVERLAY  )
 ZMK_CONDITIONAL_LAYER(mac_nav_mode,       NAV       MAC_TOGGLE,  MAC_NAV      )
@@ -169,7 +178,7 @@ ZMK_COMBO(percent,   &kp PERCENT,   15 25, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(caret,     &kp CARET,     16 26, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(ameprsand, &kp AMPERSAND, 17 27, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(asterisk,  &kp ASTERISK,  18 28, BASE MAC_OVERLAY, 50)
-// vertical > bottom
+// vertical > top
 ZMK_COMBO(lt,   &kp LT,   1 11, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(lbrc, &kp LBRC, 2 12, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(lpar, &kp LPAR, 3 13, BASE MAC_OVERLAY, 50)
@@ -219,7 +228,7 @@ LAYER(
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		&kp Z         &kp X         &kp C         &kp V         &kp B       ,   &kp B         &kp N         &kp M         &kp COMMA     &kp DOT     ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							&lt NAV SPACE &mt LCTRL TAB   SMART_NUM     &lt NUM_BOTH LANG1
+																							&lt NAV SPACE &mt LCTRL TAB   MO_SK         &lt NUM_LEFT LANG1
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
@@ -250,15 +259,16 @@ LAYER(
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
+#define AS(kc) &as LS(kc) kc
 
 LAYER(
   NumLeft,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-    XXX           &kp N7        &kp N8        &kp N9        XXX         ,   ___           ___           ___           ___           ___         ,   
+    XXX           AS(N7)        AS(N8)        &kp N9        XXX         ,   ___           ___           ___           ___           ___         ,   
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-    &kp ENTER     &kp N4        &kp N5        &kp N6        XXX         ,   ___           ___           ___           ___           ___         ,
+    &kp ENTER     AS(N4)        AS(N5)        AS(N6)        XXX         ,   ___           &kp RGUI      &kp RCTRL     &kp RALT      &kp RSHFT   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-    &kp DOT       &kp N1        &kp N2        &kp N3        XXX         ,   ___           ___           ___           ___           ___         ,   
+    &kp DOT       AS(N1)        AS(N2)        AS(N3)        XXX         ,   ___           ___           ___           ___           ___         ,   
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							&lt NAV N0    ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
