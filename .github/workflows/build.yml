@@ -15,12 +15,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get commit message
-        id: get_msg
-        run: |
-          # 커밋 메시지의 첫 줄만 가져와서 환경 변수에 저장
-          echo "msg=$(git log -1 --pretty=%s)" >> $GITHUB_OUTPUT
-
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
@@ -35,6 +29,7 @@ jobs:
           else
             cp ./temp_artifacts/* ./extracted_firmware/ 2>/dev/null || true
           fi
+
       - name: Get short SHA
         id: get_sha
         run: |
@@ -44,7 +39,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "commit-${{ steps.get_sha.outputs.short_sha }}"
-          name: "${{ steps.get_msg.outputs.msg }}"
+          name: "[${{ github.ref_name }}] ${{ github.event.head_commit.message }}"
+          body: "${{ github.event.head_commit.message }}"
           draft: false
           prerelease: false
           make_latest: true
