@@ -116,7 +116,7 @@ ZMK_HOLD_TAP(
   as,
   bindings = <&kp>, <&kp>;
   flavor = "tap-preferred";
-  tapping-term-ms = <200>;
+  tapping-term-ms = <TAPPING_TERM_MS>;
   quick-tap-ms = <QUICK_TAP_MS>;
     require-prior-idle-ms = <125>;
 )
@@ -196,7 +196,7 @@ ZMK_COMBO(bslh,  &kp BSLH,   21 22, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(pipe,  &kp PIPE,   22 23, BASE MAC_OVERLAY, 50)
 // horizontal > right (left to right)
 ZMK_COMBO(colon, &kp COLON,  6  7, BASE MAC_OVERLAY, 50)
-ZMK_COMBO(semi,  &kp SEMI,   7  8, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(semi,  &kp SEMI,   7  8, BASE MAC_OVERLAY, 50)qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 ZMK_COMBO(minus, &kp MINUS, 16 17, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(under, &kp UNDER, 17 18, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(sqt,   &kp SQT,   26 27, BASE MAC_OVERLAY, 50)
