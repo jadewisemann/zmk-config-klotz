@@ -59,11 +59,23 @@
 #define MAKE_HRM(NAME, HOLD, TAP, TRIGGER_POS) \
   ZMK_HOLD_TAP( \
 		NAME, bindings = <HOLD>, <TAP>; \
-    flavor = "tap-unless-interrupted"; \
+    flavor = "balanced"; \
     quick-tap-ms = <QUICK_TAP_MS>; \
     tapping-term-ms = <HRM_TAPPING_TERM_MS>; \
 		hold-trigger-key-positions = <TRIGGER_POS>; \
     require-prior-idle-ms = <100>; \
+    hold-trigger-on-release; \
+    retro-tap; \
+	)
+
+#define MAKE_HRM_INTERRUPT(NAME, HOLD, TAP, TRIGGER_POS) \
+  ZMK_HOLD_TAP( \
+		NAME, bindings = <HOLD>, <TAP>; \
+    flavor = "tap-unless-interrupted"; \
+    quick-tap-ms = <QUICK_TAP_MS>; \
+    tapping-term-ms = <HRM_TAPPING_TERM_MS>; \
+		hold-trigger-key-positions = <TRIGGER_POS>; \
+    require-prior-idle-ms = <125>; \
     hold-trigger-on-release; \
 	)
 
@@ -185,16 +197,18 @@ ZMK_COMBO(dqt,   &kp DQT,   27 28, BASE MAC_OVERLAY, 50)
 
 MAKE_HRM(hml, &kp, &kp, KEYS_R THUMBS)
 MAKE_HRM(hmr, &kp, &kp, KEYS_L 30 31)
+MAKE_HRM_INTERRUPT(hmli, &kp, &kp, KEYS_R THUMBS)
+MAKE_HRM_INTERRUPT(hmri, &kp, &kp, KEYS_L 30 31)
 
-#define HRM_LS(key) &hml LSHFT key
-#define HRM_LA(key) &hml LALT  key
-#define HRM_LC(key) &hml LCTRL key
-#define HRM_LG(key) &hml LGUI  key
+#define HRM_LS(key) &hmli LSHFT key
+#define HRM_LA(key) &hml LALT   key
+#define HRM_LC(key) &hml LCTRL  key
+#define HRM_LG(key) &hml LGUI   key
 
-#define HRM_RS(key) &hmr RSHFT key
-#define HRM_RA(key) &hmr RALT  key
-#define HRM_RC(key) &hmr RCTRL key
-#define HRM_RG(key) &hmr RGUI  key
+#define HRM_RS(key) &hmri RSHFT key
+#define HRM_RA(key) &hmr RALT   key
+#define HRM_RC(key) &hmr RCTRL  key
+#define HRM_RG(key) &hmr RGUI   key
 
 /* ==== keymaps ==== */
 #define LAYER(NAME, LT, RT, LM, RM, LB, RB, TH)  ZMK_LAYER(NAME, LT RT LM RM LB RB TH)
