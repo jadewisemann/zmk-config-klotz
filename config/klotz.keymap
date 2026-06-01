@@ -30,7 +30,9 @@
 
 #define QUICK_TAP_MS      100
 #define TAPPING_TERM_MS   135
-#define HRM_TAPPING_TERM_MS 280
+#define HRM_TAPPING_TERM_MS 300
+#define HRM_QUICK_TAP_MS 100
+#define HRM_PRIOR_IDLE_MS 75
 #define STICKY_RELEASE_MS 2000
 
 
@@ -60,22 +62,21 @@
   ZMK_HOLD_TAP( \
 		NAME, bindings = <HOLD>, <TAP>; \
     flavor = "balanced"; \
-    quick-tap-ms = <QUICK_TAP_MS>; \
+    quick-tap-ms = <HRM_QUICK_TAP_MS>; \
     tapping-term-ms = <HRM_TAPPING_TERM_MS>; \
 		hold-trigger-key-positions = <TRIGGER_POS>; \
-    require-prior-idle-ms = <150>; \
+    require-prior-idle-ms = <HRM_PRIOR_IDLE_MS>; \
     hold-trigger-on-release; \
-    retro-tap; \
 	)
 
-#define MAKE_HRM_SHIFT(NAME, HOLD, TAP, TRIGGER_POS) \
+#define MAKE_HRM_RETRO(NAME, HOLD, TAP, TRIGGER_POS) \
   ZMK_HOLD_TAP( \
 		NAME, bindings = <HOLD>, <TAP>; \
     flavor = "balanced"; \
-    quick-tap-ms = <QUICK_TAP_MS>; \
-    tapping-term-ms = <300>; \
+    quick-tap-ms = <HRM_QUICK_TAP_MS>; \
+    tapping-term-ms = <HRM_TAPPING_TERM_MS>; \
 		hold-trigger-key-positions = <TRIGGER_POS>; \
-    require-prior-idle-ms = <75>; \
+    require-prior-idle-ms = <HRM_PRIOR_IDLE_MS>; \
     hold-trigger-on-release; \
     retro-tap; \
 	)
@@ -198,16 +199,16 @@ ZMK_COMBO(dqt,   &kp DQT,   27 28, BASE MAC_OVERLAY, 50)
 
 MAKE_HRM(hml, &kp, &kp, KEYS_R THUMBS)
 MAKE_HRM(hmr, &kp, &kp, KEYS_L 30 31)
-MAKE_HRM_SHIFT(hmls, &kp, &kp, KEYS_R THUMBS)
-MAKE_HRM_SHIFT(hmrs, &kp, &kp, KEYS_L 30 31)
+MAKE_HRM_RETRO(hmla, &kp, &kp, KEYS_R THUMBS)
+MAKE_HRM_RETRO(hmra, &kp, &kp, KEYS_L 30 31)
 
-#define HRM_LS(key) &hmls LSHFT key
-#define HRM_LA(key) &hml LALT   key
+#define HRM_LS(key) &hml LSHFT key
+#define HRM_LA(key) &hmla LALT  key
 #define HRM_LC(key) &hml LCTRL  key
 #define HRM_LG(key) &hml LGUI   key
 
-#define HRM_RS(key) &hmrs RSHFT key
-#define HRM_RA(key) &hmr RALT   key
+#define HRM_RS(key) &hmr RSHFT key
+#define HRM_RA(key) &hmra RALT  key
 #define HRM_RC(key) &hmr RCTRL  key
 #define HRM_RG(key) &hmr RGUI   key
 
