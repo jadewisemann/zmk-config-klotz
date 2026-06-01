@@ -30,6 +30,7 @@
 
 #define QUICK_TAP_MS      100
 #define TAPPING_TERM_MS   135
+#define HRM_TAPPING_TERM_MS 280
 #define STICKY_RELEASE_MS 2000
 
 
@@ -58,9 +59,9 @@
 #define MAKE_HRM(NAME, HOLD, TAP, TRIGGER_POS) \
   ZMK_HOLD_TAP( \
 		NAME, bindings = <HOLD>, <TAP>; \
-    flavor = "tap-preferred"; \
+    flavor = "balanced"; \
     quick-tap-ms = <QUICK_TAP_MS>; \
-    tapping-term-ms = <TAPPING_TERM_MS>; \
+    tapping-term-ms = <HRM_TAPPING_TERM_MS>; \
 		hold-trigger-key-positions = <TRIGGER_POS>; \
     require-prior-idle-ms = <125>; \
     hold-trigger-on-release; \
@@ -147,7 +148,7 @@ ZMK_CONDITIONAL_LAYER(mac_func_mode,      FUNC      MAC_TOGGLE,  MAC_FUNC     )
 // ZMK_COMBO(left_thumb,      &mt LGUI ESC,    30 31,    ALL_LAYERS, 80)
 // ZMK_COMBO(right_thumb,     &kp DEL,         32 33,    ALL_LAYERS, 80)
 ZMK_COMBO(outer_thumb,  &mo SETTINGS, 31 32,    ALL_LAYERS, 200)
-ZMK_COMBO(inner_thumb,  &mo SYM,      30 33,    ALL_LAYERS, 80)
+// ZMK_COMBO(inner_thumb,  &mo SYM,      30 33,    ALL_LAYERS, 80)
 
 ZMK_COMBO(mac_toggle,  &tog MAC_TOGGLE,  0  1  2, ALL_LAYERS, 100)
 
