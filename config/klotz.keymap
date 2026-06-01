@@ -59,11 +59,11 @@
 #define MAKE_HRM(NAME, HOLD, TAP, TRIGGER_POS) \
   ZMK_HOLD_TAP( \
 		NAME, bindings = <HOLD>, <TAP>; \
-    flavor = "balanced"; \
+    flavor = "tap-unless-interrupted"; \
     quick-tap-ms = <QUICK_TAP_MS>; \
     tapping-term-ms = <HRM_TAPPING_TERM_MS>; \
 		hold-trigger-key-positions = <TRIGGER_POS>; \
-    require-prior-idle-ms = <125>; \
+    require-prior-idle-ms = <100>; \
     hold-trigger-on-release; \
 	)
 
@@ -184,24 +184,32 @@ ZMK_COMBO(dqt,   &kp DQT,   27 28, BASE MAC_OVERLAY, 50)
 #define THUMBS 30 31 32 33
 
 MAKE_HRM(hml, &kp, &kp, KEYS_R THUMBS)
-MAKE_HRM(hmr, &kp, &kp, KEYS_L)
+MAKE_HRM(hmr, &kp, &kp, KEYS_L 30 31)
+
+#define HRM_LS(key) &hml LSHFT key
+#define HRM_LA(key) &hml LALT  key
+#define HRM_LC(key) &hml LCTRL key
+#define HRM_LG(key) &hml LGUI  key
+
+#define HRM_RS(key) &hmr RSHFT key
+#define HRM_RA(key) &hmr RALT  key
+#define HRM_RC(key) &hmr RCTRL key
+#define HRM_RG(key) &hmr RGUI  key
 
 /* ==== keymaps ==== */
 #define LAYER(NAME, LT, RT, LM, RM, LB, RB, TH)  ZMK_LAYER(NAME, LT RT LM RM LB RB TH)
 
-// #define SMART_NUM &smart_num_mo FUNC NUM
-// #define SMART_NUM &smart_num_kp RSHFT NUM_RIGHT
-
+#define SLMO(key) &sl_mo key key
 LAYER(
   Base,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		&kp Q         &kp W         &kp E         &kp R         &kp T       ,   &kp Y         &kp U         &kp I         &kp O         &kp SLASH   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		&hml LSHFT A  &hml LALT S   &kp D         &kp F         &kp G       ,   &kp H         &kp J         &kp K         &hmr RALT L   &hmr RSHFT P,
+		HRM_LS(A)     HRM_LA(S)     &kp D         &kp F         &kp G       ,   &kp H         &kp J         &kp K         HRM_RA(L)     HRM_RS(P)   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		&kp Z         &kp X         &kp C         &kp V         &kp B       ,   &kp B         &kp N         &kp M         &kp COMMA     &kp DOT     ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							&lt NAV SPACE &mt LCTRL TAB   &sl_mo FUNC FUNC &lt NUM LANG1
+																							&lt NAV SPACE &mt LCTRL TAB   SLMO(FUNC)    &lt NUM LANG1
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
