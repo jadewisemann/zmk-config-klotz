@@ -146,7 +146,7 @@ ZMK_HOLD_TAP(
 ZMK_TRI_STATE(
   alt_tab_swap,
   bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
-  ignored-key-positions = <14 24>;
+  ignored-key-positions = <13 23>;
   ignored-layers = <BASE MAC_OVERLAY>;
   timeout-ms = <1000>;
 )
@@ -208,8 +208,6 @@ ZMK_COMBO(dqt,   &kp DQT,   27 28, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(alt_slash,   &kp LA(SLASH), 11 21, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(alt_space,   &kp LA(SPACE), 12 22, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(alt_tab,     &alt_tab_swap, 13 23, BASE MAC_OVERLAY, 50)
-ZMK_COMBO(alt_alt,     &sl LALT,      14 24 , BASE MAC_OVERLAY, 50)
-
 // vertical > right bottom
 ZMK_COMBO(alt_n,       &kp RA(N),          16 26, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(alt_m,       &kp RA(M),          17 27, BASE MAC_OVERLAY, 50)
@@ -230,15 +228,15 @@ MAKE_HRM(hmr, &kp, &kp, KEYS_L 30 31)
 MAKE_HRM_RETRO(hmla, &kp, &kp, KEYS_R THUMBS)
 MAKE_HRM_RETRO(hmra, &kp, &kp, KEYS_L 30 31)
 
-#define HRM_LS(key) &hml LSHFT key
+#define HRM_LS(key) &hml  LSHFT key
 #define HRM_LA(key) &hmla LALT  key
-#define HRM_LC(key) &hml LCTRL  key
-#define HRM_LG(key) &hml LGUI   key
+#define HRM_LC(key) &hml  LCTRL key
+#define HRM_LG(key) &hml  LGUI  key
 
-#define HRM_RS(key) &hmr RSHFT key
+#define HRM_RS(key) &hmr  RSHFT key
 #define HRM_RA(key) &hmra RALT  key
-#define HRM_RC(key) &hmr RCTRL  key
-#define HRM_RG(key) &hmr RGUI   key
+#define HRM_RC(key) &hmr  RCTRL key
+#define HRM_RG(key) &hmr  RGUI  key
 
 /* ==== keymaps ==== */
 #define LAYER(NAME, LT, RT, LM, RM, LB, RB, TH)  ZMK_LAYER(NAME, LT RT LM RM LB RB TH)
