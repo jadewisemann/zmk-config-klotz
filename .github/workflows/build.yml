@@ -36,6 +36,7 @@ jobs:
           FULL_MSG: ${{ github.event.head_commit.message }}
         run: |
           echo "short_sha=${GITHUB_SHA::6}" >> $GITHUB_OUTPUT
+          echo "safe_ref=${GITHUB_REF_NAME//\//-}" >> $GITHUB_OUTPUT
 
           COMMIT_BODY=$(python3 -c "
           import os
@@ -52,13 +53,14 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "commit-${{ steps.get_info.outputs.short_sha }}"
+          tag_name: "firmware-${{ steps.get_info.outputs.safe_ref }}"
           target_commitish: ${{ github.sha }}
           name: "[${{ github.ref_name }}] ${{ github.event.head_commit.message }}"
           body: ${{ steps.get_info.outputs.commit_body }}
           draft: false
           prerelease: false
           make_latest: true
+          overwrite_files: true
           files: |
             extracted_firmware/*.uf2
         env:

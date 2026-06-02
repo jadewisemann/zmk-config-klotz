@@ -10,18 +10,25 @@
 #define NAV            1
 #define NUM            2
 #define SYM            3
-#define FUNC           4
-#define SETTINGS       5
-#define MAC_TOGGLE     6
-#define MAC_OVERLAY    7
-#define MAC_NAV        8
-#define MAC_NUM        9
-#define MAC_SYM       10
-#define MAC_FUNC      11
+#define LEFTMOD        4
+#define RIGHTMOD       5
+#define FUNC           6
+#define SETTINGS       7
+#define MAC_TOGGLE     8
+#define MAC_OVERLAY    9
+#define MAC_NAV       10
+#define MAC_NUM       11
+#define MAC_SYM       12
+#define MAC_FUNC      13
+#define MAC_LEFTMOD   14
+#define MAC_RIGHTMOD  15
+#define NAV_ALT       16
+#define NAV_ALT_SHIFT 17
 
 #define ALL_LAYERS \
-  BASE NAV NUM SYM FUNC SETTINGS \
-  MAC_TOGGLE MAC_OVERLAY MAC_NAV MAC_NUM MAC_SYM MAC_FUNC
+  BASE NAV NUM SYM LEFTMOD RIGHTMOD FUNC SETTINGS \
+  MAC_TOGGLE MAC_OVERLAY MAC_NAV MAC_NUM MAC_SYM MAC_FUNC MAC_LEFTMOD MAC_RIGHTMOD \
+  NAV_ALT NAV_ALT_SHIFT
 
 /*==== config ====*/
 #define XXX &none
@@ -46,11 +53,13 @@
   flavor = "tap-preferred";
   quick-tap-ms = <QUICK_TAP_MS>;
   tapping-term-ms = <TAPPING_TERM_MS>;
+  retro-tap;
 };
 
 &lt {
   quick-tap-ms = <QUICK_TAP_MS>;
   tapping-term-ms = <TAPPING_TERM_MS>;
+  retro-tap;
 };
 
 &num_word {
@@ -138,12 +147,22 @@ ZMK_HOLD_TAP(
   quick-tap-ms = <QUICK_TAP_MS>;
 )
 
+ZMK_TRI_STATE(
+  alt_tab_swap,
+  bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
+  ignored-key-positions = <13 23>;
+  ignored-layers = <BASE MAC_OVERLAY>;
+  timeout-ms = <1000>;
+)
+
 /*==== conditional layer ====*/
 ZMK_CONDITIONAL_LAYER(mac_base_mode,                MAC_TOGGLE,  MAC_OVERLAY  )
 ZMK_CONDITIONAL_LAYER(mac_nav_mode,       NAV       MAC_TOGGLE,  MAC_NAV      )
 ZMK_CONDITIONAL_LAYER(mac_num,            NUM       MAC_TOGGLE,  MAC_NUM)
 ZMK_CONDITIONAL_LAYER(mac_sym_mode,       SYM       MAC_TOGGLE,  MAC_SYM      )
 ZMK_CONDITIONAL_LAYER(mac_func_mode,      FUNC      MAC_TOGGLE,  MAC_FUNC     )
+ZMK_CONDITIONAL_LAYER(mac_left_mod_mode,  LEFTMOD   MAC_TOGGLE,  MAC_LEFTMOD  )
+ZMK_CONDITIONAL_LAYER(mac_right_mod_mode, RIGHTMOD  MAC_TOGGLE,  MAC_RIGHTMOD )
 
 
 /*==== macros ====*/
@@ -189,6 +208,17 @@ ZMK_COMBO(minus, &kp MINUS, 16 17, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(under, &kp UNDER, 17 18, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(sqt,   &kp SQT,   26 27, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(dqt,   &kp DQT,   27 28, BASE MAC_OVERLAY, 50)
+// vertical > left bottom
+ZMK_COMBO(alt_slash,   &kp LA(SLASH), 11 21, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(alt_space,   &kp LA(SPACE), 12 22, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(alt_tab,     &alt_tab_swap, 13 23, BASE MAC_OVERLAY, 50)
+// vertical > right bottom
+ZMK_COMBO(alt_n,       &kp RA(N),          16 26, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(alt_m,       &kp RA(M),          17 27, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(alt_comma,   &kp RA(COMMA),      18 28, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(salt_n,      &kp LS(RA(N)),      16 26, LEFTMOD MAC_LEFTMOD, 50)
+ZMK_COMBO(salt_m,      &kp LS(RA(M)),      17 27, LEFTMOD MAC_LEFTMOD, 50)
+ZMK_COMBO(salt_comma,  &kp LS(RA(COMMA)),  18 28, LEFTMOD MAC_LEFTMOD, 50)
 
 /*==== home row mod =====*/
 #define KEYS_L 0 1 2 3 4 10 11 12 13 14 20 21 22 23 24
@@ -202,39 +232,40 @@ MAKE_HRM(hmr, &kp, &kp, KEYS_L 30 31)
 MAKE_HRM_RETRO(hmla, &kp, &kp, KEYS_R THUMBS)
 MAKE_HRM_RETRO(hmra, &kp, &kp, KEYS_L 30 31)
 
-#define HRM_LS(key) &hml LSHFT key
+#define HRM_LS(key) &hml  LSHFT key
 #define HRM_LA(key) &hmla LALT  key
-#define HRM_LC(key) &hml LCTRL  key
-#define HRM_LG(key) &hml LGUI   key
+#define HRM_LC(key) &hml  LCTRL key
+#define HRM_LG(key) &hml  LGUI  key
 
-#define HRM_RS(key) &hmr RSHFT key
+#define HRM_RS(key) &hmr  RSHFT key
 #define HRM_RA(key) &hmra RALT  key
-#define HRM_RC(key) &hmr RCTRL  key
-#define HRM_RG(key) &hmr RGUI   key
+#define HRM_RC(key) &hmr  RCTRL key
+#define HRM_RG(key) &hmr  RGUI  key
 
 /* ==== keymaps ==== */
 #define LAYER(NAME, LT, RT, LM, RM, LB, RB, TH)  ZMK_LAYER(NAME, LT RT LM RM LB RB TH)
 
 #define SLMO(key) &sl_mo key key
+#define LSA(key) &kp LS(LA(key))
 LAYER(
   Base,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
 		&kp Q         &kp W         &kp E         &kp R         &kp T       ,   &kp Y         &kp U         &kp I         &kp O         &kp SLASH   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		HRM_LS(A)     HRM_LA(S)     &kp D         &kp F         &kp G       ,   &kp H         &kp J         &kp K         HRM_RA(L)     HRM_RS(P)   ,
+		&kp A         &kp S         &kp D         &kp F         &kp G       ,   &kp H         &kp J         &kp K         &kp L         &kp P       ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		&kp Z         &kp X         &kp C         &kp V         &kp B       ,   &kp B         &kp N         &kp M         &kp COMMA     &kp DOT     ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							&lt NAV SPACE &mt LCTRL TAB   SLMO(FUNC)    &lt NUM LANG1
+																							&lt NAV SPACE SLMO(LEFTMOD)  SLMO(RIGHTMOD) &lt NUM LANG1
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
 
-//TODO: add some keys for nav
+//TODO: add some keys for nav, layer 통폐합
 LAYER(
   Nav,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-		XXX           XXX           XXX           XXX           XXX         ,   &kp ESC       &kp TAB       &kp ENTER     &kp BACKSPACE &kp DEL     ,
+		XXX           &mo NAV_ALT   &mo NAV_ALT_SHIFT XXX       XXX         ,   &kp ESC       &kp TAB       &kp ENTER     &kp BACKSPACE &kp DEL     ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     &sk LSHFT     &sk LALT      &sk LCTRL     &sk LGUI      XXX         ,   &kp SPACE     &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
@@ -248,7 +279,7 @@ LAYER(
 LAYER(
   Num,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-    XXX           &kp N7        &kp N8        &kp N9        &kp ENTER   ,   ___           ___           ___           ___           ___         ,   
+    XXX           &kp N7        &kp N8        &kp N9        &kp ENTER   ,   ___           ___           ___           &mo FUNC      ___         ,   
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     &kp N0        &kp N4        &kp N5        &kp N6        &kp DOT     ,   ___           &sk RGUI      &sk RCTRL     &sk RALT      &sk RSHFT   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
@@ -267,6 +298,32 @@ LAYER(
     &kp GRAVE	    &kp LT        &kp LBRC      &kp LPAR      &kp LBKT    ,   &kp RBKT      &kp RPAR      &kp RBRC	    &kp GT        &kp TILDE   ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		&kp EXCL      &kp AT_SIGN   &kp HASH      &kp DOLLAR    ___         ,   ___           &kp PERCENT   &kp CARET     &kp AMPERSAND &kp ASTERISK,
+//╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
+																							___           ___             ___           ___
+//                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
+)
+
+LAYER(
+  LeftMod,
+//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+		&kp LC(Q)     &kp LC(W)     &kp LC(E)     &kp LC(R)     &kp LC(T)   ,   &kp LS(Y)     &kp LS(U)     &kp LS(I)     &kp LS(O)     &kp LS(SLASH),
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+		&kp LC(A)     &kp LC(S)     &kp LC(D)     &kp LC(F)     &kp LC(G)   ,   &kp LS(H)     &kp LS(J)     &kp LS(K)     &kp LS(L)     &kp LS(P)   ,
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &kp LC(Z)     &kp LC(X)     &kp LC(C)     &kp LC(V)     &kp LC(B)   ,   &kp LS(B)     &kp LS(N)     &kp LS(M)     &kp LS(COMMA) &kp LS(DOT) ,
+//╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
+																							___           ___             ___           ___
+//                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
+)
+
+LAYER(
+  RightMod,
+//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+		&kp RS(Q)     &kp RS(W)     &kp RS(E)     &kp RS(R)     &kp RS(T)   ,   &kp RC(Y)     &kp RC(U)     &kp RC(I)     &kp RC(O)     &kp RC(SLASH),
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+		&kp RS(A)     &kp RS(S)     &kp RS(D)     &kp RS(F)     &kp RS(G)   ,   &kp RC(H)     &kp RC(J)     &kp RC(K)     &kp RC(L)     &kp RC(P)   ,
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &kp RS(Z)     &kp RS(X)     &kp RS(C)     &kp RS(V)     &kp RS(B)   ,   &kp RC(B)     &kp RC(N)     &kp RC(M)     &kp RC(COMMA) &kp RC(DOT) ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							___           ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
@@ -313,6 +370,7 @@ LAYER(
 																							___           ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
+
 LAYER(
   MacOverlay,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
@@ -322,7 +380,7 @@ LAYER(
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     ___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							___           &mt LGUI TAB    ___           &lt NUM F18
+																							___           ___             ___           &lt NUM F18
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
@@ -374,6 +432,58 @@ LAYER(
 		___           ___           ___           ___           ___   	    ,   ___           ___           ___           ___           ___         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
 		___           ___           ___           ___           ___     	  ,   ___           ___           ___           ___           ___         ,
+//╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
+																							___           ___             ___           ___
+//                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
+)
+
+LAYER(
+  MacLeftMod,
+//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+		&kp LG(Q)     &kp LG(W)     &kp LG(E)     &kp LG(R)     &kp LG(T)   ,   &kp LS(Y)     &kp LS(U)     &kp LS(I)     &kp LS(O)     &kp LS(SLASH),
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+		&kp LG(A)     &kp LG(S)     &kp LG(D)     &kp LG(F)     &kp LG(G)   ,   &kp LS(H)     &kp LS(J)     &kp LS(K)     &kp LS(L)     &kp LS(P)   ,
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &kp LG(Z)     &kp LG(X)     &kp LG(C)     &kp LG(V)     &kp LG(B)   ,   &kp LS(B)     &kp LS(N)     &kp LS(M)     &kp LS(COMMA) &kp LS(DOT) ,
+//╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
+																							___           ___             ___           ___
+//                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
+)
+
+LAYER(
+  MacRightMod,
+//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+		&kp RS(Q)     &kp RS(W)     &kp RS(E)     &kp RS(R)     &kp RS(T)   ,   &kp RG(Y)     &kp RG(U)     &kp RG(I)     &kp RG(O)     &kp RG(SLASH),
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+		&kp RS(A)     &kp RS(S)     &kp RS(D)     &kp RS(F)     &kp RS(G)   ,   &kp RG(H)     &kp RG(J)     &kp RG(K)     &kp RG(L)     &kp RG(P)   ,
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &kp RS(Z)     &kp RS(X)     &kp RS(C)     &kp RS(V)     &kp RS(B)   ,   &kp RG(B)     &kp RG(N)     &kp RG(M)     &kp RG(COMMA) &kp RG(DOT) ,
+//╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
+																							___           ___             ___           ___
+//                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
+)
+
+LAYER(
+  NavAlt,
+//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+		___           ___           ___           ___           ___         ,   ___           ___           ___           ___           ___       ,
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    ___           ___           ___           ___           ___         ,   ___           &kp LA(J)     &kp LA(K)     &kp LA(L)     &kp LA(P)   ,
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    ___           ___           ___           ___           ___         ,   ___           ___           ___           ___           ___         ,
+//╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
+																							___           ___             ___           ___
+//                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
+)
+
+LAYER(
+  NavAltShift,
+//╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+		___           ___           ___           ___           ___         ,   ___           ___           ___           ___           ___       ,
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    ___           ___           ___           ___           ___         ,   ___           LSA(J)        LSA(K)        LSA(L)        LSA(P)      ,
+//├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    ___           ___           ___           ___           ___         ,   ___           ___           ___           ___           ___         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							___           ___             ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
