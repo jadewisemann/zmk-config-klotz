@@ -144,6 +144,14 @@ ZMK_HOLD_TAP(
   quick-tap-ms = <QUICK_TAP_MS>;
 )
 
+ZMK_TRI_STATE(
+  alt_tab_swap,
+  bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
+  ignored-key-positions = <14 24>;
+  ignored-layers = <BASE MAC_OVERLAY>;
+  timeout-ms = <300>;
+)
+
 /*==== conditional layer ====*/
 ZMK_CONDITIONAL_LAYER(mac_base_mode,                MAC_TOGGLE,  MAC_OVERLAY  )
 ZMK_CONDITIONAL_LAYER(mac_nav_mode,       NAV       MAC_TOGGLE,  MAC_NAV      )
@@ -204,6 +212,10 @@ ZMK_COMBO(alt_comma,   &kp RA(COMMA),      18 28, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(salt_n,      &kp LS(RA(N)),      16 26, LEFTMOD MAC_LEFTMOD, 50)
 ZMK_COMBO(salt_m,      &kp LS(RA(M)),      17 27, LEFTMOD MAC_LEFTMOD, 50)
 ZMK_COMBO(salt_comma,  &kp LS(RA(COMMA)),  18 28, LEFTMOD MAC_LEFTMOD, 50)
+// vertical > left alt
+ZMK_COMBO(alt_slash,   &kp LA(SLASH),      11 21, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(alt_space,   &kp LA(SPACE),      12 22, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(alt_tab,     &alt_tab_swap,      13 23, BASE MAC_OVERLAY, 50)
 
 /*==== home row mod =====*/
 #define KEYS_L 0 1 2 3 4 10 11 12 13 14 20 21 22 23 24
