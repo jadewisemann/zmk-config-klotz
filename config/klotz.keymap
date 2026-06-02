@@ -149,7 +149,7 @@ ZMK_TRI_STATE(
   bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
   ignored-key-positions = <14 24>;
   ignored-layers = <BASE MAC_OVERLAY>;
-  timeout-ms = <300>;
+  timeout-ms = <1000>;
 )
 
 /*==== conditional layer ====*/
@@ -205,17 +205,19 @@ ZMK_COMBO(minus, &kp MINUS, 16 17, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(under, &kp UNDER, 17 18, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(sqt,   &kp SQT,   26 27, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(dqt,   &kp DQT,   27 28, BASE MAC_OVERLAY, 50)
-// vertical > right alt
+// vertical > left bottom
+ZMK_COMBO(alt_slash,   &kp LA(SLASH), 11 21, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(alt_space,   &kp LA(SPACE), 12 22, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(alt_tab,     &alt_tab_swap, 13 23, BASE MAC_OVERLAY, 50)
+ZMK_COMBO(alt_alt,     &sl LALT,      14 24 , BASE MAC_OVERLAY, 50)
+
+// vertical > right bottom
 ZMK_COMBO(alt_n,       &kp RA(N),          16 26, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(alt_m,       &kp RA(M),          17 27, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(alt_comma,   &kp RA(COMMA),      18 28, BASE MAC_OVERLAY, 50)
 ZMK_COMBO(salt_n,      &kp LS(RA(N)),      16 26, LEFTMOD MAC_LEFTMOD, 50)
 ZMK_COMBO(salt_m,      &kp LS(RA(M)),      17 27, LEFTMOD MAC_LEFTMOD, 50)
 ZMK_COMBO(salt_comma,  &kp LS(RA(COMMA)),  18 28, LEFTMOD MAC_LEFTMOD, 50)
-// vertical > left alt
-ZMK_COMBO(alt_slash,   &kp LA(SLASH),      11 21, BASE MAC_OVERLAY, 50)
-ZMK_COMBO(alt_space,   &kp LA(SPACE),      12 22, BASE MAC_OVERLAY, 50)
-ZMK_COMBO(alt_tab,     &alt_tab_swap,      13 23, BASE MAC_OVERLAY, 50)
 
 /*==== home row mod =====*/
 #define KEYS_L 0 1 2 3 4 10 11 12 13 14 20 21 22 23 24
