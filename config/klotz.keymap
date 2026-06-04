@@ -167,23 +167,23 @@ ZMK_COMBO(alt_tab,     &alt_tab_swap, 13 23, BASE MAC_OVERLAY, 50)
 #define SLMO(key) &sl_mo key key
 
 #define LM1 LALT
-#define LM2 LCTRL
-#define LM3 LSHFT
+#define LM2 LSHFT
+#define LM3 LCTRL
 #define LM4 LGUI
 
 #define RM1 RALT
-#define RM2 RCTRL
-#define RM3 RSHFT
+#define RM2 RSHFT
+#define RM3 RCTRL
 #define RM4 RGUI
 
 #define MLM1 LALT
-#define MLM2 LGUI
-#define MLM3 LSHFT
+#define MLM2 LSHFT
+#define MLM3 LGUI
 #define MLM4 LCTRL
 
 #define MRM1 RALT
-#define MRM2 RGUI
-#define MRM3 RSHFT
+#define MRM2 RSHFT
+#define MRM3 RGUI
 #define MRM4 RCTRL
 
 LAYER(
