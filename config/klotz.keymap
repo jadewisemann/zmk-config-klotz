@@ -71,6 +71,14 @@ ZMK_HOLD_TAP(
   quick-tap-ms = <QUICK_TAP_MS>;
 )
 
+ZMK_HOLD_TAP(
+  mo_caps_word,
+  bindings = <&mo>, <&caps_word>;
+  flavor = "balanced";
+  tapping-term-ms = <200>;
+  quick-tap-ms = <QUICK_TAP_MS>;
+)
+
 ZMK_TRI_STATE(
   alt_tab_swap,
   bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
@@ -130,7 +138,8 @@ LAYER_MOD_MACRO(rm4)
                ╰────────╯ ╰─────────╯            */
 
 
-ZMK_COMBO(outer_thumb, &caps_word,         31 32, ALL_LAYERS, 100)
+#define SETTING_CAPS_WORD &mo_caps_word SETTINGS 0
+ZMK_COMBO(outer_thumb, SETTING_CAPS_WORD,  31 32, ALL_LAYERS, 100)
 ZMK_COMBO(mac_toggle,  &tog MAC_TOGGLE,  0  1  2, ALL_LAYERS, 100)
 
 // vertical > top
