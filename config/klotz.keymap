@@ -59,7 +59,6 @@
   quick-tap-ms = <QUICK_TAP_MS>;
   tapping-term-ms = <200>;
   flavor = "balanced";
-  retro-tap;
 };
 
 /*==== custom hold-tap =====*/
