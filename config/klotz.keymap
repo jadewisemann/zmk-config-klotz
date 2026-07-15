@@ -128,7 +128,7 @@ ZMK_TRI_STATE(alt_tab_swap,
   bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
   ignored-key-positions = <22 23>;
   ignored-layers = <BASE MAC_OVERLAY>;
-  timeout-ms = <500>;
+  timeout-ms = <800>;
 )
 
 /*====CONDITIONAL-LAYER=====================================*/
@@ -168,9 +168,9 @@ ZMK_COMBO(m_next_tab,  &kp LG(LS(RBKT)),    22 23   ,      MAC_OVERLAY, COMBO_TE
 ZMK_COMBO(m_go_back,   &kp LG(LBKT),     20 21      ,      MAC_OVERLAY, COMBO_TERM_MS)
 /*---GENERAL-COMBO->-RIGHT-TOP----------------------------------------------------*/
 ZMK_COMBO(combo_space, &kp SPACE,         6  7      , BASE MAC_OVERLAY, COMBO_TERM_MS)
-ZMK_COMBO(combo_space, &kp LANG1,            7  8   , BASE            , COMBO_TERM_MS)
+ZMK_COMBO(combo_lang,  &kp LANG1,            7  8   , BASE            , COMBO_TERM_MS)
 /*---GENERAL-COMBO->-RIGHT-TOP->-MAC----------------------------------------------*/
-ZMK_COMBO(combo_space, &kp F18,              7  8   ,      MAC_OVERLAY, COMBO_TERM_MS)
+ZMK_COMBO(combo_lang_m, &kp F18,              7  8   ,      MAC_OVERLAY, COMBO_TERM_MS)
 /*---GENERAL-COMBO->-RIGHT-BOTTOM-------------------------------------------------*/
 #define MEH   LC(LS(LALT))
 #define HYPER LG(LC(LS(LALT)))
@@ -244,9 +244,11 @@ LAYER(Nav,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     ___           &kp SQT       &kp GRAVE     &kp BSLH      ___         ,   WIN_CAPTURE   &kp HOME      &kp PAGE_DOWN &kp PAGE_UP   &kp END     ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-																							___           ___             ___           ___
+																							___           ___             ___           &sk LSHFT
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
+
+
 
 LAYER(Num,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
