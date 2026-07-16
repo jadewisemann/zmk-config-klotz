@@ -126,9 +126,9 @@ MAKE_HRM(hmr, KEYS_L)
 /*====TRI-STATE===============================*/
 ZMK_TRI_STATE(alt_tab_swap,
   bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
-  ignored-key-positions = <22 23>;
+  ignored-key-positions = <2 3>;
   ignored-layers = <BASE MAC_OVERLAY>;
-  timeout-ms = <800>;
+  timeout-ms = <600>;
 )
 
 /*====CONDITIONAL-LAYER=====================================*/
