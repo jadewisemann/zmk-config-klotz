@@ -1,0 +1,67 @@
+/*
+ * Stable custom behaviors and aliases used by the layer definitions.
+ *
+ * Included by klotz.keymap after layer IDs and timing values are defined.
+ */
+
+/* Global behavior configuration */
+&sk {
+  release-after-ms = <STICKY_RELEASE_MS>;
+  quick-release;
+};
+
+&mt {
+  flavor = "tap-preferred";
+  quick-tap-ms = <QUICK_TAP_MS>;
+  tapping-term-ms = <TAPPING_TERM_MS>;
+  retro-tap;
+};
+
+&lt {
+  quick-tap-ms = <QUICK_TAP_MS>;
+  tapping-term-ms = <200>;
+  flavor = "balanced";
+};
+
+/* Custom hold-taps */
+ZMK_HOLD_TAP(mo_caps_word,
+  bindings = <&mo>, <&caps_word>;
+  flavor = "balanced";
+  tapping-term-ms = <200>;
+  quick-tap-ms = <QUICK_TAP_MS>;
+)
+
+ZMK_HOLD_TAP(ht_bootloader,
+  bindings = <&bootloader>, <&none>;
+  flavor = "hold-preferred";
+  tapping-term-ms = <5000>;
+)
+
+ZMK_MACRO(bt_clr,
+  bindings = <&macro_tap &bt BT_CLR>;
+)
+
+ZMK_HOLD_TAP(ht_bt_clr,
+  bindings = <&bt_clr>, <&none>;
+  flavor = "hold-preferred";
+  tapping-term-ms = <5000>;
+)
+
+/* Key overrides */
+ZMK_MOD_MORPH(lpar_lt,
+  bindings = <&kp LPAR>, <&kp LT>;
+  mods = <(MOD_LSFT|MOD_RSFT)>;
+)
+
+ZMK_MOD_MORPH(rpar_gt,
+  bindings = <&kp RPAR>, <&kp GT>;
+  mods = <(MOD_LSFT|MOD_RSFT)>;
+)
+
+/* Alt-Tab state */
+ZMK_TRI_STATE(alt_tab_swap,
+  bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
+  ignored-key-positions = <2 3>;
+  ignored-layers = <BASE MAC_OVERLAY>;
+  timeout-ms = <600>;
+)

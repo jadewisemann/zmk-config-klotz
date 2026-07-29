@@ -1,0 +1,65 @@
+/*
+ * Home-row modifier combos.
+ *
+ * Included by klotz.keymap after layer IDs and COMBO_TERM_MS are defined.
+ */
+
+#define L_PINKY  10
+#define L_RING   11
+#define L_MIDDLE 12
+#define L_INDEX  13
+#define L_INNER  14
+
+#define R_INNER  15
+#define R_INDEX  16
+#define R_MIDDLE 17
+#define R_RING   18
+#define R_PINKY  19
+
+/* Left */
+ZMK_COMBO(left_alt , &kp LALT     , L_PINKY L_RING                         , BASE, COMBO_TERM_MS)
+ZMK_COMBO(left_shft, &kp LSHFT    ,         L_RING L_MIDDLE                , BASE, COMBO_TERM_MS)
+ZMK_COMBO(left_ctrl, &kp LCTRL    ,                L_MIDDLE L_INDEX        , BASE, COMBO_TERM_MS)
+ZMK_COMBO(left_gui , &kp LGUI     ,                         L_INDEX L_INNER, BASE, COMBO_TERM_MS)
+ZMK_COMBO(left_as  , &kp LA(LSHFT), L_PINKY        L_MIDDLE                , BASE, COMBO_TERM_MS)
+ZMK_COMBO(left_sc  , &kp LS(LCTRL),         L_RING          L_INDEX        , BASE, COMBO_TERM_MS)
+ZMK_COMBO(left_ac  , &kp LA(LCTRL), L_PINKY                 L_INDEX        , BASE, COMBO_TERM_MS)
+ZMK_COMBO(left_ag  , &kp LA(LGUI) , L_PINKY                         L_INNER, BASE, COMBO_TERM_MS)
+ZMK_COMBO(left_sg  , &kp LS(LGUI) ,         L_RING                  L_INNER, BASE, COMBO_TERM_MS)
+ZMK_COMBO(left_cg  , &kp LC(LGUI) ,                L_MIDDLE         L_INNER, BASE, COMBO_TERM_MS)
+
+/* Right */
+ZMK_COMBO(right_alt , &kp RALT     ,                          R_RING R_PINKY, BASE    , COMBO_TERM_MS)
+ZMK_COMBO(right_shft, &kp RSHFT    ,                 R_MIDDLE R_RING        , BASE NAV, COMBO_TERM_MS)
+ZMK_COMBO(right_ctrl, &kp RCTRL    ,         R_INDEX R_MIDDLE               , BASE    , COMBO_TERM_MS)
+ZMK_COMBO(right_gui , &kp RGUI     , R_INNER R_INDEX                        , BASE    , COMBO_TERM_MS)
+ZMK_COMBO(right_as  , &kp RA(RSHFT),                 R_MIDDLE        R_PINKY, BASE    , COMBO_TERM_MS)
+ZMK_COMBO(right_sc  , &kp RS(RCTRL),         R_INDEX          R_RING        , BASE    , COMBO_TERM_MS)
+ZMK_COMBO(right_ac  , &kp RA(RCTRL),         R_INDEX                 R_PINKY, BASE    , COMBO_TERM_MS)
+ZMK_COMBO(right_ag  , &kp RA(RGUI) , R_INNER                         R_PINKY, BASE    , COMBO_TERM_MS)
+ZMK_COMBO(right_sg  , &kp RS(RGUI) , R_INNER                  R_RING        , BASE    , COMBO_TERM_MS)
+ZMK_COMBO(right_cg  , &kp RC(RGUI) , R_INNER         R_MIDDLE               , BASE    , COMBO_TERM_MS)
+
+/* macOS: left */
+ZMK_COMBO(m_left_alt , &kp LALT     , L_PINKY L_RING                         , MAC_OVERLAY, COMBO_TERM_MS)
+ZMK_COMBO(m_left_shft, &kp LSHFT    ,         L_RING L_MIDDLE                , MAC_OVERLAY, COMBO_TERM_MS)
+ZMK_COMBO(m_left_ctrl, &kp LGUI     ,                L_MIDDLE L_INDEX        , MAC_OVERLAY, COMBO_TERM_MS)
+ZMK_COMBO(m_left_gui , &kp LCTRL    ,                         L_INDEX L_INNER, MAC_OVERLAY, COMBO_TERM_MS)
+ZMK_COMBO(m_left_as  , &kp LA(LSHFT), L_PINKY        L_MIDDLE                , MAC_OVERLAY, COMBO_TERM_MS)
+ZMK_COMBO(m_left_sc  , &kp LS(LGUI) ,         L_RING          L_INDEX        , MAC_OVERLAY, COMBO_TERM_MS)
+ZMK_COMBO(m_left_ac  , &kp LA(LGUI) , L_PINKY                 L_INDEX        , MAC_OVERLAY, COMBO_TERM_MS)
+ZMK_COMBO(m_left_ag  , &kp LA(LCTRL), L_PINKY                         L_INNER, MAC_OVERLAY, COMBO_TERM_MS)
+ZMK_COMBO(m_left_sg  , &kp LS(LCTRL),         L_RING                  L_INNER, MAC_OVERLAY, COMBO_TERM_MS)
+ZMK_COMBO(m_left_cg  , &kp LG(LCTRL),                L_MIDDLE         L_INNER, MAC_OVERLAY, COMBO_TERM_MS)
+
+/* macOS: right */
+ZMK_COMBO(m_right_alt , &kp RALT     ,                          R_RING R_PINKY, MAC_OVERLAY        , COMBO_TERM_MS)
+ZMK_COMBO(m_right_shft, &kp RSHFT    ,                 R_MIDDLE R_RING        , MAC_OVERLAY MAC_NAV, COMBO_TERM_MS)
+ZMK_COMBO(m_right_ctrl, &kp RGUI     ,         R_INDEX R_MIDDLE               , MAC_OVERLAY        , COMBO_TERM_MS)
+ZMK_COMBO(m_right_gui , &kp RCTRL    , R_INNER R_INDEX                        , MAC_OVERLAY        , COMBO_TERM_MS)
+ZMK_COMBO(m_right_as  , &kp RA(RSHFT),                 R_MIDDLE        R_PINKY, MAC_OVERLAY        , COMBO_TERM_MS)
+ZMK_COMBO(m_right_sc  , &kp RS(RGUI) ,         R_INDEX          R_RING        , MAC_OVERLAY        , COMBO_TERM_MS)
+ZMK_COMBO(m_right_ac  , &kp RA(RGUI) ,         R_INDEX                 R_PINKY, MAC_OVERLAY        , COMBO_TERM_MS)
+ZMK_COMBO(m_right_ag  , &kp RA(RCTRL), R_INNER                         R_PINKY, MAC_OVERLAY        , COMBO_TERM_MS)
+ZMK_COMBO(m_right_sg  , &kp RS(RCTRL), R_INNER                  R_RING        , MAC_OVERLAY        , COMBO_TERM_MS)
+ZMK_COMBO(m_right_cg  , &kp RG(RCTRL), R_INNER         R_MIDDLE               , MAC_OVERLAY        , COMBO_TERM_MS)

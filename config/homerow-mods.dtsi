@@ -1,0 +1,38 @@
+/*
+ * Home-row mod behaviors and key aliases.
+ *
+ * Included by klotz.keymap after the HRM timing values are defined.
+ */
+
+#define KEYS_L 0 1 2 3 4 10 11 12 13 14 20 21 22 23 24
+#define KEYS_R 5 6 7 8 9 15 16 17 18 19 25 26 27 28 29
+
+#define MAKE_HRM(NAME, TRIGGER_POS) \
+  ZMK_HOLD_TAP(NAME, \
+    bindings = <&kp>, <&kp>; \
+    flavor = "balanced"; \
+    quick-tap-ms = <HRM_QUICK_TAP_MS>; \
+    tapping-term-ms = <HRM_TAPPING_TERM_MS>; \
+    hold-trigger-key-positions = <TRIGGER_POS>; \
+    require-prior-idle-ms = <HRM_PRIOR_IDLE_MS>; \
+    hold-trigger-on-release; \
+  )
+
+MAKE_HRM(hml, KEYS_R)
+MAKE_HRM(hmr, KEYS_L)
+
+#define HRM_LA(key)  &hml LALT  key
+#define HRM_LS(key)  &hml LSHFT key
+#define HRM_LC(key)  &hml LCTRL key
+#define HRM_LG(key)  &hml LGUI  key
+
+#define HRM_MLC(key) &hml LGUI  key
+#define HRM_MLG(key) &hml LCTRL key
+
+#define HRM_RA(key)  &hmr RALT  key
+#define HRM_RS(key)  &hmr RSHFT key
+#define HRM_RC(key)  &hmr RCTRL key
+#define HRM_RG(key)  &hmr RGUI  key
+
+#define HRM_MRC(key) &hmr RGUI  key
+#define HRM_MRG(key) &hmr RCTRL key
