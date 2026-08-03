@@ -24,6 +24,13 @@
 #define ___ &trans
 #define XXX &none
 
+#ifndef KLOTZ_BT_CLEAR
+#define KLOTZ_BT_CLEAR BT_CLEAR
+#define KLOTZ_BT_SEL(n) &bt BT_SEL n
+#define KLOTZ_OUT_TOG &out OUT_TOG
+#define KLOTZ_OUT_BLE &out OUT_BLE
+#endif
+
 #define QUICK_TAP_MS        100
 #define TAPPING_TERM_MS     135
 #define HRM_TAPPING_TERM_MS 300
@@ -104,11 +111,11 @@ LAYER(Func,
 #define BT_CLEAR   &ht_bt_clr 0 0
 LAYER(Settings,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-		&bootloader   &out OUT_TOG  &out OUT_BLE  &out OUT_USB  XXX         ,   XXX           XXX           XXX           XXX           XXX         ,
+		&bootloader   KLOTZ_OUT_TOG  KLOTZ_OUT_BLE &out OUT_USB  XXX         ,   XXX           XXX           XXX           XXX           XXX         ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		BT_CLEAR      &bt BT_SEL 3  &bt BT_SEL 4  &bt BT_SEL 5  XXX         ,   XXX           TOGGLE_MAC    XXX           XXX           BOOTLOADER  ,
+		KLOTZ_BT_CLEAR KLOTZ_BT_SEL(3) KLOTZ_BT_SEL(4) KLOTZ_BT_SEL(5) XXX   ,   XXX           TOGGLE_MAC    XXX           XXX           BOOTLOADER  ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		XXX           &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  XXX         ,   XXX           XXX           XXX           XXX           XXX         ,
+		XXX           KLOTZ_BT_SEL(0) KLOTZ_BT_SEL(1) KLOTZ_BT_SEL(2) XXX   ,   XXX           XXX           XXX           XXX           XXX         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							XXX           XXX             XXX           XXX
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯

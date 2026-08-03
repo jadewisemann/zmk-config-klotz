@@ -3,3 +3,12 @@ config SHIELD_KLOTZ_LEFT
 
 config SHIELD_KLOTZ_RIGHT
     def_bool $(shields_list_contains,klotz_right)
+
+config SHIELD_KLOTZ_ESB_LEFT
+    def_bool $(shields_list_contains,klotz_esb_left)
+
+config SHIELD_KLOTZ_ESB_RIGHT
+    def_bool $(shields_list_contains,klotz_esb_right)
+
+config SHIELD_KLOTZ_ESB_DONGLE
+    def_bool $(shields_list_contains,klotz_esb_dongle)

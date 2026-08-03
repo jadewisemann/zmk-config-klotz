@@ -19,7 +19,25 @@ endif # LEFT RIGHT
 
 
 
-if ZMK_BACKLIGHT
+if SHIELD_KLOTZ_ESB_LEFT || SHIELD_KLOTZ_ESB_RIGHT || SHIELD_KLOTZ_ESB_DONGLE
+
+    config ZMK_SPLIT
+        default y
+
+endif # ESB
+
+
+
+if SHIELD_KLOTZ_ESB_DONGLE
+
+    config ZMK_SPLIT_ROLE_CENTRAL
+        default y
+
+endif # ESB DONGLE
+
+
+
+if ZMK_BACKLIGHT && !SHIELD_KLOTZ_ESB_DONGLE
 
     config PWM
         default y
