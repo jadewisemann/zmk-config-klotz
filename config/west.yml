@@ -33,8 +33,18 @@ manifest:
       path: nrf
     - name: nrfxlib
       remote: nrfconnect
-      revision: v3.1-branch
+      revision: v3.1.1
       repo-path: sdk-nrfxlib
       path: nrfxlib
+    - name: mbedtls
+      remote: nrfconnect
+      revision: ncs-v3.1.1
+      repo-path: sdk-mbedtls
+      path: modules/crypto/mbedtls
+    - name: oberon-psa-crypto
+      remote: nrfconnect
+      revision: ncs-v3.1.1
+      repo-path: sdk-oberon-psa-crypto
+      path: modules/crypto/oberon-psa-crypto
   self:
     path: config
