@@ -10,6 +10,7 @@ jobs:
       archive_name: firmware-ble
 
   build_esb:
+    needs: build_ble
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
     with:
       build_matrix_path: build-esb.yaml
