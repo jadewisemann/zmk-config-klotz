@@ -4,11 +4,20 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build_ble:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    with:
+      archive_name: firmware-ble
+
+  build_esb:
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    with:
+      build_matrix_path: build-esb.yaml
+      config_path: config-esb
+      archive_name: firmware-esb
 
   publish:
-    needs: build
+    needs: [build_ble, build_esb]
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
     steps:
@@ -18,7 +27,8 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: firmware
+          pattern: firmware-*
+          merge-multiple: true
           path: ./temp_artifacts
 
       - name: Unzip firmware

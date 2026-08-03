@@ -1,0 +1,13 @@
+include:
+  - board: nice_nano//zmk
+    shield: klotz_esb_left
+    artifact-name: klotz_esb_left
+    cmake-args: -DZMK_CONFIG=$GITHUB_WORKSPACE/config
+  - board: nice_nano//zmk
+    shield: klotz_esb_right
+    artifact-name: klotz_esb_right
+    cmake-args: -DZMK_CONFIG=$GITHUB_WORKSPACE/config
+  - board: nice_nano//zmk
+    shield: klotz_esb_dongle
+    artifact-name: klotz_esb_dongle
+    cmake-args: -DZMK_CONFIG=$GITHUB_WORKSPACE/config

@@ -20,14 +20,5 @@ include:
     shield: klotz_right
     artifact-name: klotz_ble_right
   - board: nice_nano//zmk
-    shield: klotz_esb_left
-    artifact-name: klotz_esb_left
-  - board: nice_nano//zmk
-    shield: klotz_esb_right
-    artifact-name: klotz_esb_right
-  - board: nice_nano//zmk
-    shield: klotz_esb_dongle
-    artifact-name: klotz_esb_dongle
-  - board: nice_nano//zmk
     shield: settings_reset
     artifact-name: settings_reset
