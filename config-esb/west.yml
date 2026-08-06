@@ -8,6 +8,8 @@ manifest:
       url-base: https://github.com/dhruvinsh
     - name: kumbung01
       url-base: https://github.com/kumbung01
+    - name: jadewisemann
+      url-base: https://github.com/jadewisemann
     - name: nrfconnect
       url-base: https://github.com/nrfconnect
   projects:
@@ -25,8 +27,8 @@ manifest:
       remote: dhruvinsh
       revision: main
     - name: zmk-feature-split-esb
-      remote: kumbung01
-      revision: main
+      remote: jadewisemann
+      revision: codex/fix-sleep-resume
     - name: sdk-nrf
       remote: kumbung01
       revision: v3.1-branch-tdma-fhss
