@@ -6,19 +6,21 @@ manifest:
       url-base: https://github.com/urob
     - name: dhruvinsh
       url-base: https://github.com/dhruvinsh
+  # Pinned so a given commit of this repo always builds the same firmware.
+  # Keep these in sync with config-esb/west.yml when bumping.
   projects:
     - name: zmk
       remote: zmkfirmware
-      revision: main
+      revision: 268b1b1e82150460f00fd701bcd08583d5c75d29
       import: app/west.yml
     - name: zmk-helpers
       remote: urob
-      revision: main
+      revision: bc114546392b4615ac90a99140eaf21dde31209d
     - name: zmk-auto-layer
       remote: urob
-      revision: main
+      revision: 62c201934711369d50a28df12e1d055d05cb6460
     - name: zmk-tri-state
       remote: dhruvinsh
-      revision: main
+      revision: ebbc1f0ccdb51669650bb0ac3e34920d09e62400
   self:
     path: config

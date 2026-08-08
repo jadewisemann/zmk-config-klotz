@@ -6,27 +6,35 @@ manifest:
       url-base: https://github.com/urob
     - name: dhruvinsh
       url-base: https://github.com/dhruvinsh
+    - name: jadewisemann
+      url-base: https://github.com/jadewisemann
     - name: kumbung01
       url-base: https://github.com/kumbung01
     - name: nrfconnect
       url-base: https://github.com/nrfconnect
+  # Revisions are pinned on purpose. `revision: main` meant every CI run could
+  # pick up a different ZMK / module tree, so the same commit of this repo did
+  # not produce the same firmware twice - and the ESB module tracks ZMK's split
+  # transport API, which is still moving.
   projects:
     - name: zmk
       remote: zmkfirmware
-      revision: main
+      revision: 268b1b1e82150460f00fd701bcd08583d5c75d29
       import: app/west.yml
     - name: zmk-helpers
       remote: urob
-      revision: main
+      revision: bc114546392b4615ac90a99140eaf21dde31209d
     - name: zmk-auto-layer
       remote: urob
-      revision: main
+      revision: 62c201934711369d50a28df12e1d055d05cb6460
     - name: zmk-tri-state
       remote: dhruvinsh
-      revision: main
+      revision: ebbc1f0ccdb51669650bb0ac3e34920d09e62400
+    # Our own fork, so RX-framing / sleep fixes actually land in the build.
+    # Upstream is kumbung01/zmk-feature-split-esb.
     - name: zmk-feature-split-esb
-      remote: kumbung01
-      revision: main
+      remote: jadewisemann
+      revision: f5ba8b12be22965ee0ff8ba642bd1b974ff9b73a
     - name: sdk-nrf
       remote: kumbung01
       revision: v3.1-branch-tdma-fhss
