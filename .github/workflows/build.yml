@@ -41,13 +41,24 @@ jobs:
             cp ./temp_artifacts/* ./extracted_firmware/ 2>/dev/null || true
           fi
 
-      - name: Get short SHA & Commit Body
+      - name: Get short SHA & Commit Subject/Body
         id: get_info
         env:
           FULL_MSG: ${{ github.event.head_commit.message }}
         run: |
           echo "short_sha=${GITHUB_SHA::6}" >> $GITHUB_OUTPUT
           echo "safe_ref=${GITHUB_REF_NAME//\//-}" >> $GITHUB_OUTPUT
+
+          # The release name was the whole commit message, which the releases
+          # API rejects past 256 characters - any commit with a real body took
+          # the publish job down with a 422. Use the subject line only (the
+          # body is already passed separately below) and leave room for the
+          # "[branch] " prefix.
+          COMMIT_SUBJECT=$(python3 -c "
+          import os
+          msg = os.environ.get('FULL_MSG', '')
+          print(msg.split('\n', 1)[0].strip()[:180])
+          ")
 
           COMMIT_BODY=$(python3 -c "
           import os
@@ -56,6 +67,10 @@ jobs:
           body = '\n'.join(lines[1:]).strip() if len(lines) > 1 else ''
           print(body)
           ")
+
+          echo "commit_subject<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMIT_SUBJECT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
           echo "commit_body<<EOF" >> $GITHUB_OUTPUT
           echo "$COMMIT_BODY" >> $GITHUB_OUTPUT
@@ -66,7 +81,7 @@ jobs:
         with:
           tag_name: "firmware-${{ steps.get_info.outputs.safe_ref }}"
           target_commitish: ${{ github.sha }}
-          name: "[${{ github.ref_name }}] ${{ github.event.head_commit.message }}"
+          name: "[${{ github.ref_name }}] ${{ steps.get_info.outputs.commit_subject }}"
           body: ${{ steps.get_info.outputs.commit_body }}
           draft: false
           prerelease: false
