@@ -32,9 +32,13 @@ manifest:
       revision: ebbc1f0ccdb51669650bb0ac3e34920d09e62400
     # Our own fork, so RX-framing / sleep fixes actually land in the build.
     # Upstream is kumbung01/zmk-feature-split-esb.
+    # 57a31ec adds whole-key state resync on reconnect / failed sends - the
+    # stuck-key fix. Lost releases used to stay lost: esb_tdma_stop() wipes the
+    # TX ring via reset_tx_all(), a full ring makes send_data() fail with the
+    # return ignored, and nothing re-sent the bitmap after reconnect.
     - name: zmk-feature-split-esb
       remote: jadewisemann
-      revision: f5ba8b12be22965ee0ff8ba642bd1b974ff9b73a
+      revision: 57a31ec621384e736796bc50c46f1e6a4227ef3a
     - name: sdk-nrf
       remote: kumbung01
       revision: v3.1-branch-tdma-fhss
