@@ -14,3 +14,9 @@ GitHub Actions builds both connection modes:
 - `settings_reset.uf2`: clears stored settings before changing modes
 
 The BLE and ESB firmwares are separate. Flash both halves with the matching pair; ESB mode also requires the dongle firmware on a third nice!nano.
+
+## English Colemak and Korean
+
+The firmware starts in English Colemak and keeps the previous Korean key positions on a separate layer. Use the right thumb language key or the right-top language combo to switch both the host input language and the firmware layer. Configure the host for QWERTY English and Korean 2-set; a host-side Colemak layout would remap the firmware output again. The macOS layer sends F18 for language switching, while the regular layer sends LANG1.
+
+The keyboard cannot detect input-source changes made on the host. If the two layouts get out of sync, hold the outer thumb combo for Settings and tap the top-right key to toggle only the firmware layout.

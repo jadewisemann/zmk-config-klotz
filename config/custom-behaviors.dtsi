@@ -41,6 +41,28 @@ ZMK_MACRO(bt_clr,
   bindings = <&macro_tap &bt BT_CLR>;
 )
 
+ZMK_MACRO(lang_win,
+  bindings = <&kp LANG1 &tog KOREAN>;
+)
+
+ZMK_MACRO(lang_mac,
+  bindings = <&kp F18 &tog KOREAN>;
+)
+
+ZMK_HOLD_TAP(lang_num,
+  bindings = <&mo>, <&lang_win>;
+  quick-tap-ms = <QUICK_TAP_MS>;
+  tapping-term-ms = <200>;
+  flavor = "balanced";
+)
+
+ZMK_HOLD_TAP(mac_lang_num,
+  bindings = <&mo>, <&lang_mac>;
+  quick-tap-ms = <QUICK_TAP_MS>;
+  tapping-term-ms = <200>;
+  flavor = "balanced";
+)
+
 ZMK_HOLD_TAP(ht_bt_clr,
   bindings = <&bt_clr>, <&none>;
   flavor = "hold-preferred";
@@ -62,6 +84,6 @@ ZMK_MOD_MORPH(rpar_gt,
 ZMK_TRI_STATE(alt_tab_swap,
   bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
   ignored-key-positions = <2 3>;
-  ignored-layers = <BASE MAC_OVERLAY>;
+  ignored-layers = <BASE KOREAN MAC_OVERLAY>;
   timeout-ms = <600>;
 )
