@@ -84,12 +84,39 @@ def main():
         for n in sorted(dupes):
             print(f"duplicate artifact name: {n}", file=sys.stderr)
         raise SystemExit(1)
+    jobs = group(include)
     if "--check" in sys.argv:
-        print(f"{len(include)} firmware targets OK", file=sys.stderr)
+        print(f"{len(include)} firmware targets OK, {len(jobs)} CI jobs", file=sys.stderr)
         for t in include:
             print(f"  {t['name']:28} {t['manifest']:10} {t['board']:16} {t['shield']}", file=sys.stderr)
         return
-    print(json.dumps({"include": include}))
+    print(json.dumps({"include": jobs}))
+
+
+# GitHub runs at most 20 jobs at once on a personal account; the cache job
+# takes 2. Each job also pays ~45s of container start + cache restore, so pack
+# targets of the same manifest together until everything fits in one wave.
+MAX_JOBS = 18
+
+
+def group(targets):
+    by_manifest = {}
+    for t in targets:
+        by_manifest.setdefault(t["manifest"], []).append(t)
+    per_job = 1
+    while sum(-(-len(ts) // per_job) for ts in by_manifest.values()) > MAX_JOBS:
+        per_job += 1
+    jobs = []
+    for manifest, ts in by_manifest.items():
+        for i in range(0, len(ts), per_job):
+            chunk = ts[i:i + per_job]
+            jobs.append({
+                "name": " + ".join(t["name"] for t in chunk),
+                "id": chunk[0]["name"],
+                "manifest": manifest,
+                "targets": json.dumps(chunk),
+            })
+    return jobs
 
 
 if __name__ == "__main__":

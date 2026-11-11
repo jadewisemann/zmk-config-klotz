@@ -60,7 +60,8 @@ jobs:
             zmk/
             nrf/
             nrfxlib/
-          key: west-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+            optional/
+          key: west-v2-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
           lookup-only: true
 
       # Start from the previous cache for this manifest (if any), so a version
@@ -77,8 +78,11 @@ jobs:
             zmk/
             nrf/
             nrfxlib/
-          key: west-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
-          restore-keys: west-${{ matrix.manifest }}-
+            optional/
+          key: west-v2-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+          restore-keys: |
+            west-v2-${{ matrix.manifest }}-
+            west-${{ matrix.manifest }}-
 
       - name: West update
         if: steps.exists.outputs.cache-hit != 'true'
@@ -97,9 +101,11 @@ jobs:
             zmk/
             nrf/
             nrfxlib/
-          key: west-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+            optional/
+          key: west-v2-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
 
-  # Every firmware is its own job, BLE and ESB alike, so they all run at once.
+  # BLE and ESB builds all run at once; scripts/matrix.py packs a few
+  # firmwares per job so the whole matrix fits in one wave of runners.
   build:
     name: ${{ matrix.name }}
     needs: matrix
@@ -128,8 +134,11 @@ jobs:
             zmk/
             nrf/
             nrfxlib/
-          key: west-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
-          restore-keys: west-${{ matrix.manifest }}-
+            optional/
+          key: west-v2-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+          restore-keys: |
+            west-v2-${{ matrix.manifest }}-
+            west-${{ matrix.manifest }}-
 
       # Every revision in the manifests is pinned, so an exact cache hit is
       # already the right tree and west update can be skipped.
@@ -146,35 +155,13 @@ jobs:
           west zephyr-export
 
       - name: Build
-        shell: bash
         env:
-          NAME: ${{ matrix.name }}
-          BOARD: ${{ matrix.board }}
-          SHIELD: ${{ matrix.shield }}
-          KEYMAP: ${{ matrix.keymap }}
-          CONFS: ${{ matrix.confs }}
-          OVERLAYS: ${{ matrix.overlays }}
-          DTS_FLAGS: ${{ matrix.cppflags }}
-        run: |
-          set -euo pipefail
-          root="$GITHUB_WORKSPACE"
-          abs() { local IFS=';' out=() p; for p in $1; do out+=("$root/$p"); done; echo "${out[*]}"; }
-          args=(-DZMK_CONFIG="$root/config" -DSHIELD="$SHIELD")
-          [ -n "$KEYMAP" ]    && args+=(-DKEYMAP_FILE="$root/$KEYMAP")
-          [ -n "$CONFS" ]     && args+=(-DEXTRA_CONF_FILE="$(abs "$CONFS")")
-          [ -n "$OVERLAYS" ]  && args+=(-DEXTRA_DTC_OVERLAY_FILE="$(abs "$OVERLAYS")")
-          [ -n "$DTS_FLAGS" ] && args+=(-DDTS_EXTRA_CPPFLAGS="$DTS_FLAGS")
-          west build -s zmk/app -d build -b "$BOARD" -- "${args[@]}"
-          mkdir -p out
-          cp build/zephyr/zmk.uf2 "out/$NAME.uf2"
-
-      - name: Kconfig
-        if: ${{ !cancelled() }}
-        run: grep -v -e "^#" -e "^$" build/zephyr/.config | sort || true
+          TARGETS: ${{ matrix.targets }}
+        run: python3 scripts/build.py
 
       - uses: actions/upload-artifact@v7
         with:
-          name: fw-${{ matrix.name }}
+          name: fw-${{ matrix.id }}
           path: out/*.uf2
           if-no-files-found: error
 
