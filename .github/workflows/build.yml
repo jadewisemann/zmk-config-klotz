@@ -140,7 +140,10 @@ jobs:
       - name: West init
         run: |
           west init -l "${{ matrix.manifest }}"
-          if [ "${{ steps.west-cache.outputs.cache-hit }}" != "true" ]; then
+          # Safety net: any project missing from the cache forces an update.
+          missing=$(west list -f "{abspath}" | while read -r p; do [ -d "$p/.git" ] || echo "$p"; done)
+          if [ "${{ steps.west-cache.outputs.cache-hit }}" != "true" ] || [ -n "$missing" ]; then
+            echo "west update (cache-hit=${{ steps.west-cache.outputs.cache-hit }}, missing: ${missing:-none})"
             west update --fetch-opt=--filter=tree:0
           fi
           west zephyr-export
