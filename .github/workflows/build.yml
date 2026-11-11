@@ -20,7 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.expand.outputs.matrix }}
-      cold: ${{ steps.cold.outputs.cold }}
     steps:
       - uses: actions/checkout@v7
 
@@ -33,63 +32,41 @@ jobs:
           yq -o=json devices.yaml | python3 scripts/matrix.py --check
           echo "matrix=$(yq -o=json devices.yaml | python3 scripts/matrix.py)" >> "$GITHUB_OUTPUT"
 
-      # Only check whether each manifest's west cache exists; nothing is downloaded.
-      - name: Look up west cache (BLE)
-        id: ble
-        uses: actions/cache/restore@v6
-        with:
-          path: |
-            modules/
-            tools/
-            zephyr/
-            bootloader/
-            zmk/
-            nrf/
-            nrfxlib/
-          key: west-config-${{ hashFiles('config/west.yml') }}
-          lookup-only: true
 
-      - name: Look up west cache (ESB)
-        id: esb
-        uses: actions/cache/restore@v6
-        with:
-          path: |
-            modules/
-            tools/
-            zephyr/
-            bootloader/
-            zmk/
-            nrf/
-            nrfxlib/
-          key: west-config-esb-${{ hashFiles('config-esb/west.yml') }}
-          lookup-only: true
-
-      - name: Manifests that need a fresh cache
-        id: cold
-        run: |
-          cold=()
-          [ "${{ steps.ble.outputs.cache-hit }}" = "true" ] || cold+=('"config"')
-          [ "${{ steps.esb.outputs.cache-hit }}" = "true" ] || cold+=('"config-esb"')
-          echo "cold=[$(IFS=,; echo "${cold[*]}")]" >> "$GITHUB_OUTPUT"
-
-  # Fill a missing west cache once per manifest, instead of every build job
-  # downloading and saving the same 1 GB in parallel. Skipped when warm.
-  warm:
-    name: Prepare ${{ matrix.manifest }} workspace
+  # Saves the west cache for each manifest. Runs alongside the builds (they
+  # never wait for it) and exits early when the cache already exists. It lives
+  # in the same container as the builds so the cache key/version matches.
+  cache:
+    name: Cache ${{ matrix.manifest }} workspace
     needs: matrix
-    if: needs.matrix.outputs.cold != '[]'
     runs-on: ubuntu-latest
     container:
       image: zmkfirmware/zmk-build-arm:stable
     strategy:
       matrix:
-        manifest: ${{ fromJson(needs.matrix.outputs.cold) }}
+        manifest: [config, config-esb]
     steps:
       - uses: actions/checkout@v7
+
+      - name: Check for an existing cache
+        id: exists
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            modules/
+            tools/
+            zephyr/
+            bootloader/
+            zmk/
+            nrf/
+            nrfxlib/
+          key: west-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+          lookup-only: true
 
       # Start from the previous cache for this manifest (if any), so a version
       # bump only fetches what changed instead of the whole tree.
       - name: Restore previous west workspace
+        if: steps.exists.outputs.cache-hit != 'true'
         uses: actions/cache/restore@v6
         with:
           path: |
@@ -104,11 +81,13 @@ jobs:
           restore-keys: west-${{ matrix.manifest }}-
 
       - name: West update
+        if: steps.exists.outputs.cache-hit != 'true'
         run: |
           west init -l "${{ matrix.manifest }}"
           west update --fetch-opt=--filter=tree:0
 
       - uses: actions/cache/save@v6
+        if: steps.exists.outputs.cache-hit != 'true'
         with:
           path: |
             modules/
@@ -123,8 +102,7 @@ jobs:
   # Every firmware is its own job, BLE and ESB alike, so they all run at once.
   build:
     name: ${{ matrix.name }}
-    needs: [matrix, warm]
-    if: ${{ !cancelled() && needs.matrix.result == 'success' && needs.warm.result != 'failure' }}
+    needs: matrix
     runs-on: ubuntu-latest
     container:
       image: zmkfirmware/zmk-build-arm:stable
@@ -135,7 +113,9 @@ jobs:
       - uses: actions/checkout@v7
 
       # One cache per manifest (the ESB manifest pulls a different nrf tree).
-      # Restore only: the warm job is the one place that saves it.
+      # Restore only: the cache job is the one place that saves it. After a
+      # manifest change this restores the previous cache and west update
+      # fetches just the difference.
       - name: Restore west workspace
         id: west-cache
         uses: actions/cache/restore@v6
@@ -157,7 +137,8 @@ jobs:
         run: |
           west init -l "${{ matrix.manifest }}"
           # Safety net: any project missing from the cache forces an update.
-          missing=$(west list -f "{abspath}" | while read -r p; do [ -d "$p/.git" ] || echo "$p"; done)
+          # (Line 1 of west list is this repo's manifest dir, which has no .git.)
+          missing=$(west list -f "{abspath}" | tail -n +2 | while read -r p; do [ -d "$p/.git" ] || echo "$p"; done)
           if [ "${{ steps.west-cache.outputs.cache-hit }}" != "true" ] || [ -n "$missing" ]; then
             echo "west update (cache-hit=${{ steps.west-cache.outputs.cache-hit }}, missing: ${missing:-none})"
             west update --fetch-opt=--filter=tree:0
