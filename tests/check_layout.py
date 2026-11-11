@@ -23,4 +23,8 @@ assert "bindings = <&kp LANG1 &tog KOREAN>;" in behaviors
 assert "bindings = <&kp F18 &tog KOREAN>;" in behaviors
 assert "combo_lang,  &lang_win" in combos
 assert "combo_lang_m, &lang_mac" in combos
+base_thumbs = keymap.split("LAYER(Base,", 1)[1].split("\n)\n", 1)[0]
+assert "&sk LGUI" in base_thumbs and "&mac_lang_num NUM 0" in base_thumbs, "macOS must be the default"
+assert "#define TOGGLE_WIN &tog WIN_TOGGLE" in keymap
+assert "MAC_" not in keymap + combos + behaviors
 print("Colemak/Korean keymap check passed")

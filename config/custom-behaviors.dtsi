@@ -84,6 +84,6 @@ ZMK_MOD_MORPH(rpar_gt,
 ZMK_TRI_STATE(alt_tab_swap,
   bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
   ignored-key-positions = <2 3>;
-  ignored-layers = <BASE KOREAN MAC_OVERLAY>;
+  ignored-layers = <BASE KOREAN WIN_OVERLAY>;
   timeout-ms = <600>;
 )
