@@ -87,6 +87,22 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # Start from the previous cache for this manifest (if any), so a version
+      # bump only fetches what changed instead of the whole tree.
+      - name: Restore previous west workspace
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            modules/
+            tools/
+            zephyr/
+            bootloader/
+            zmk/
+            nrf/
+            nrfxlib/
+          key: west-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+          restore-keys: west-${{ matrix.manifest }}-
+
       - name: West update
         run: |
           west init -l "${{ matrix.manifest }}"
