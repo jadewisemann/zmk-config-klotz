@@ -1,3 +1,8 @@
+/*
+ * ESB link addresses for klotz. Left half, right half and dongle all use this
+ * file. Each keyboard gets its own addresses so two ESB keyboards (or their
+ * dongles) never talk to each other.
+ */
 / {
     esb_split: esb_split {
         compatible = "zmk,esb-split";

@@ -6,8 +6,12 @@ manifest:
       url-base: https://github.com/urob
     - name: dhruvinsh
       url-base: https://github.com/dhruvinsh
+    - name: duckyb
+      url-base: https://github.com/duckyb
   # Pinned so a given commit of this repo always builds the same firmware.
-  # Keep these in sync with config-esb/west.yml when bumping.
+  # Keep the shared projects in sync with config-esb/west.yml when bumping.
+  # Extra modules go under modules/ so the CI west cache (which caches
+  # modules/, zephyr/, zmk/, ...) contains them. Do the same for new ones.
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -16,11 +20,19 @@ manifest:
     - name: zmk-helpers
       remote: urob
       revision: bc114546392b4615ac90a99140eaf21dde31209d
+      path: modules/zmk-helpers
     - name: zmk-auto-layer
       remote: urob
       revision: 62c201934711369d50a28df12e1d055d05cb6460
+      path: modules/zmk-auto-layer
     - name: zmk-tri-state
       remote: dhruvinsh
       revision: ebbc1f0ccdb51669650bb0ac3e34920d09e62400
+      path: modules/zmk-tri-state
+    # Urchin shield (34 keys, nice!nano).
+    - name: urchin-zmk-module
+      remote: duckyb
+      revision: a3ab64fa7779f82675695f3d7d17f705f840da25
+      path: modules/urchin-zmk-module
   self:
     path: config

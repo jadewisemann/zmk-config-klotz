@@ -1,0 +1,2 @@
+/* KLOTZ: 34 keys, exactly the shared layout. */
+#include "../../keymap/base.keymap"

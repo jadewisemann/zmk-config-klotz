@@ -1,0 +1,94 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * TC36K: positions 0-33 are the shared 34-key layout; 34 and 35 are the
+ * outermost thumb keys (L3, R3), left unbound by the shared keymap.
+ */
+
+#include <dt-bindings/zmk/matrix_transform.h>
+#include <dt-bindings/zmk/hid_indicators.h>
+#include <physical_layouts.dtsi>
+#include "tc36k-layouts.dtsi"
+
+/ {
+    leds {
+        compatible = "gpio-leds";
+
+        hid_led: hid_led {
+            gpios = <&gpio0 25 GPIO_ACTIVE_HIGH>;
+        };
+    };
+
+    indicators {
+        compatible = "zmk,indicator-leds";
+
+        hid_indicator: hid_indicator {
+            indicator = <(HID_INDICATOR_NUM_LOCK | HID_INDICATOR_CAPS_LOCK | HID_INDICATOR_SCROLL_LOCK | HID_INDICATOR_COMPOSE | HID_INDICATOR_KANA)>;
+            leds = <&hid_led>;
+        };
+    };
+};
+
+/ {
+    kscan0: kscan0 {
+        compatible = "zmk,kscan-gpio-matrix";
+        diode-direction = "col2row";
+        wakeup-source;
+
+        col-gpios
+            = <&pico_header 20 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 21 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 28 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 27 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 26 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 19 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 16 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 15 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 7 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 4 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 3 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 10 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            , <&pico_header 11 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>
+            ;
+
+        row-gpios
+            = <&pico_header 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 17 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 18 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 12 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 22 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pico_header 9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            ;
+    };
+};
+
+/ {
+    default_transform: keymap_transform0 {
+        compatible = "zmk,matrix-transform";
+        columns = <13>;
+        rows = <13>;
+        map = <
+            RC(0,0) RC(3,1) RC(6,2) RC(6,3) RC(10,4) RC(10,8) RC(3,9)  RC(6,10)  RC(10,11) RC(1,12)
+            RC(1,0) RC(4,1) RC(7,2) RC(8,3) RC(9,4)  RC(11,8) RC(0,9)  RC(3,10)  RC(1,11)  RC(4,12)
+            RC(2,0) RC(5,1) RC(2,2) RC(9,3) RC(5,4)  RC(7,8)  RC(11,9) RC(12,10) RC(12,11) RC(8,12)
+                                    RC(5,5) RC(9,6)  RC(0,6)  RC(7,7)  RC(2,5) RC(4,7)
+        >;
+    };
+};
+
+/ {
+    chosen {
+        zmk,physical-layout = &physical_layout0;
+        // Other chosen items
+    };
+};
+

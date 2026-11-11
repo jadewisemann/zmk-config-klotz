@@ -1,0 +1,43 @@
+# Keyboards built by CI.
+#
+# To add a keyboard:
+#   1. Make sure its shield exists (config/boards/shields/<shield>/ or a west module).
+#      Split shields need <shield>_left / <shield>_right.
+#   2. Create config/devices/<id>/<id>.keymap (include ../../keymap/base.keymap;
+#      define KB_EXTRA_KEYS if it has more than 34 keys).
+#   3. For dongle modes add config/devices/<id>/dongle.overlay (matrix transform with
+#      the same key count) and, for esb, config/devices/<id>/esb.overlay with
+#      addresses no other keyboard uses.
+#   4. Add an entry below. `python3 scripts/matrix.py --check` validates it.
+#
+# Modes:
+#   ble        left half is the central, connects to the host over Bluetooth
+#   bledongle  both halves are peripherals of a BLE dongle (USB to the host)
+#   esb        both halves talk ESB to a dongle (USB to the host)
+#   usb        one-piece wired keyboard
+
+dongle_board: nice_nano//zmk
+
+keyboards:
+  klotz:
+    board: nice_nano//zmk
+    shield: klotz
+    modes: [ble, bledongle, esb]
+
+  urchin:
+    board: nice_nano//zmk
+    shield: urchin           # from duckyb/urchin-zmk-module (west module)
+    modes: [ble, bledongle, esb]
+
+  totem:
+    board: xiao_ble//zmk
+    shield: totem
+    modes: [ble, bledongle, esb]
+
+  tc36k:
+    board: rpi_pico//zmk
+    shield: tc36k
+    modes: [usb]
+
+# Clears stored pairings/settings; flash before switching modes.
+settings_reset: [nice_nano//zmk, xiao_ble//zmk]

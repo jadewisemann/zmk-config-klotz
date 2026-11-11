@@ -2,8 +2,8 @@ from pathlib import Path
 import re
 
 
-config = Path(__file__).resolve().parents[1] / "config"
-keymap = (config / "klotz.keymap").read_text()
+config = Path(__file__).resolve().parents[1] / "config" / "keymap"
+keymap = (config / "base.keymap").read_text()
 behaviors = (config / "custom-behaviors.dtsi").read_text()
 combos = (config / "combos.dtsi").read_text()
 

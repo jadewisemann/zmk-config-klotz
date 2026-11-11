@@ -1,93 +1,204 @@
-on: [push, pull_request, workflow_dispatch]
+name: Build firmware
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+# A newer push to a branch cancels its older run. On main every run finishes,
+# so every main commit gets its own release.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 permissions:
   contents: write
 
 jobs:
-  build_ble:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
-    with:
-      archive_name: firmware-ble
-
-  build_esb:
-    needs: build_ble
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
-    with:
-      build_matrix_path: build-esb.yaml
-      config_path: config-esb
-      archive_name: firmware-esb
-
-  publish:
-    needs: [build_ble, build_esb]
+  matrix:
+    name: Plan builds
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
+    outputs:
+      matrix: ${{ steps.expand.outputs.matrix }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: firmware-*
-          merge-multiple: true
-          path: ./temp_artifacts
+      - name: Keymap checks
+        run: python3 tests/check_layout.py
 
-      - name: Unzip firmware
+      - name: Expand devices.yaml
+        id: expand
         run: |
-          mkdir -p extracted_firmware
-          if [ -f ./temp_artifacts/firmware.zip ]; then
-            unzip ./temp_artifacts/firmware.zip -d ./extracted_firmware
-          else
-            cp ./temp_artifacts/* ./extracted_firmware/ 2>/dev/null || true
+          yq -o=json devices.yaml | python3 scripts/matrix.py --check
+          echo "matrix=$(yq -o=json devices.yaml | python3 scripts/matrix.py)" >> "$GITHUB_OUTPUT"
+
+
+  # Saves the west cache for each manifest. Runs alongside the builds (they
+  # never wait for it) and exits early when the cache already exists. It lives
+  # in the same container as the builds so the cache key/version matches.
+  cache:
+    name: Cache ${{ matrix.manifest }} workspace
+    needs: matrix
+    runs-on: ubuntu-latest
+    container:
+      image: zmkfirmware/zmk-build-arm:stable
+    strategy:
+      matrix:
+        manifest: [config, config-esb]
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check for an existing cache
+        id: exists
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            modules/
+            tools/
+            zephyr/
+            bootloader/
+            zmk/
+            nrf/
+            nrfxlib/
+            optional/
+          key: west-v2-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+          lookup-only: true
+
+      # Start from the previous cache for this manifest (if any), so a version
+      # bump only fetches what changed instead of the whole tree.
+      - name: Restore previous west workspace
+        if: steps.exists.outputs.cache-hit != 'true'
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            modules/
+            tools/
+            zephyr/
+            bootloader/
+            zmk/
+            nrf/
+            nrfxlib/
+            optional/
+          key: west-v2-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+          restore-keys: |
+            west-v2-${{ matrix.manifest }}-
+            west-${{ matrix.manifest }}-
+
+      - name: West update
+        if: steps.exists.outputs.cache-hit != 'true'
+        run: |
+          west init -l "${{ matrix.manifest }}"
+          west update --fetch-opt=--filter=tree:0
+
+      - uses: actions/cache/save@v6
+        if: steps.exists.outputs.cache-hit != 'true'
+        with:
+          path: |
+            modules/
+            tools/
+            zephyr/
+            bootloader/
+            zmk/
+            nrf/
+            nrfxlib/
+            optional/
+          key: west-v2-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+
+  # BLE and ESB builds all run at once; scripts/matrix.py packs a few
+  # firmwares per job so the whole matrix fits in one wave of runners.
+  build:
+    name: ${{ matrix.name }}
+    needs: matrix
+    runs-on: ubuntu-latest
+    container:
+      image: zmkfirmware/zmk-build-arm:stable
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.matrix.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # One cache per manifest (the ESB manifest pulls a different nrf tree).
+      # Restore only: the cache job is the one place that saves it. After a
+      # manifest change this restores the previous cache and west update
+      # fetches just the difference.
+      - name: Restore west workspace
+        id: west-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            modules/
+            tools/
+            zephyr/
+            bootloader/
+            zmk/
+            nrf/
+            nrfxlib/
+            optional/
+          key: west-v2-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+          restore-keys: |
+            west-v2-${{ matrix.manifest }}-
+            west-${{ matrix.manifest }}-
+
+      # Every revision in the manifests is pinned, so an exact cache hit is
+      # already the right tree and west update can be skipped.
+      - name: West init
+        run: |
+          west init -l "${{ matrix.manifest }}"
+          # Safety net: any project missing from the cache forces an update.
+          # (Line 1 of west list is this repo's manifest dir, which has no .git.)
+          missing=$(west list -f "{abspath}" | tail -n +2 | while read -r p; do [ -d "$p/.git" ] || echo "$p"; done)
+          if [ "${{ steps.west-cache.outputs.cache-hit }}" != "true" ] || [ -n "$missing" ]; then
+            echo "west update (cache-hit=${{ steps.west-cache.outputs.cache-hit }}, missing: ${missing:-none})"
+            west update --fetch-opt=--filter=tree:0
           fi
+          west zephyr-export
 
-      - name: Get short SHA & Commit Subject/Body
-        id: get_info
+      - name: Build
         env:
-          FULL_MSG: ${{ github.event.head_commit.message }}
-        run: |
-          echo "short_sha=${GITHUB_SHA::6}" >> $GITHUB_OUTPUT
-          echo "safe_ref=${GITHUB_REF_NAME//\//-}" >> $GITHUB_OUTPUT
+          TARGETS: ${{ matrix.targets }}
+        run: python3 scripts/build.py
 
-          # The release name was the whole commit message, which the releases
-          # API rejects past 256 characters - any commit with a real body took
-          # the publish job down with a 422. Use the subject line only (the
-          # body is already passed separately below) and leave room for the
-          # "[branch] " prefix.
-          COMMIT_SUBJECT=$(python3 -c "
-          import os
-          msg = os.environ.get('FULL_MSG', '')
-          print(msg.split('\n', 1)[0].strip()[:180])
-          ")
-
-          COMMIT_BODY=$(python3 -c "
-          import os
-          msg = os.environ.get('FULL_MSG', '')
-          lines = msg.split('\n')
-          body = '\n'.join(lines[1:]).strip() if len(lines) > 1 else ''
-          print(body)
-          ")
-
-          echo "commit_subject<<EOF" >> $GITHUB_OUTPUT
-          echo "$COMMIT_SUBJECT" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-          echo "commit_body<<EOF" >> $GITHUB_OUTPUT
-          echo "$COMMIT_BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
+      - uses: actions/upload-artifact@v7
         with:
-          tag_name: "firmware-${{ steps.get_info.outputs.safe_ref }}"
-          target_commitish: ${{ github.sha }}
-          name: "[${{ github.ref_name }}] ${{ steps.get_info.outputs.commit_subject }}"
-          body: ${{ steps.get_info.outputs.commit_body }}
-          draft: false
-          prerelease: false
-          make_latest: true
-          overwrite_files: true
-          files: |
-            extracted_firmware/*.uf2
+          name: fw-${{ matrix.id }}
+          path: out/*.uf2
+          if-no-files-found: error
+
+  # Every main push (and every manual run) gets a new release; nothing is
+  # overwritten. Manual runs from other branches are marked pre-release.
+  release:
+    name: Release
+    needs: build
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: fw-*
+          merge-multiple: true
+          path: firmware
+
+      - name: Release info
+        id: info
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: ${{ github.event.head_commit.message || format('Manual build of {0}', github.ref_name) }}
+        run: |
+          stamp=$(TZ=Asia/Seoul date +%Y%m%d-%H%M)
+          echo "tag=fw-${stamp}-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+          subject=$(printf '%s\n' "$MESSAGE" | head -n1 | cut -c1-180)
+          echo "name=${stamp} ${subject}" >> "$GITHUB_OUTPUT"
+          python3 scripts/release_notes.py firmware "$MESSAGE" > notes.md
+          ls firmware
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.info.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: ${{ steps.info.outputs.name }}
+          body_path: notes.md
+          prerelease: ${{ github.ref != 'refs/heads/main' }}
+          make_latest: ${{ github.ref == 'refs/heads/main' }}
+          files: firmware/*.uf2

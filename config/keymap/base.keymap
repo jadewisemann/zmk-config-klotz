@@ -25,11 +25,29 @@
 #define ___ &trans
 #define XXX &none
 
-#ifndef KLOTZ_BT_CLEAR
-#define KLOTZ_BT_CLEAR BT_CLEAR
-#define KLOTZ_BT_SEL(n) &bt BT_SEL n
-#define KLOTZ_OUT_TOG &out OUT_TOG
-#define KLOTZ_OUT_BLE &out OUT_BLE
+/*
+ * Builds without Bluetooth (ESB halves/dongle, wired boards) have no &bt
+ * behavior, so the build matrix passes -DKB_NO_BLE and these become &none.
+ */
+#ifdef KB_NO_BLE
+#define KB_BT_CLEAR    &none
+#define KB_BT_SEL(n)   &none
+#define KB_OUT_TOG     &none
+#define KB_OUT_BLE     &none
+#else
+#define KB_BT_CLEAR    BT_CLEAR
+#define KB_BT_SEL(n)   &bt BT_SEL n
+#define KB_OUT_TOG     &out OUT_TOG
+#define KB_OUT_BLE     &out OUT_BLE
+#endif
+
+/*
+ * Shared 34-key layout: positions 0-33 are the same on every keyboard.
+ * Boards with more keys define KB_EXTRA_KEYS (one binding per extra position,
+ * appended after 33) in config/devices/<device>/<device>.keymap.
+ */
+#ifndef KB_EXTRA_KEYS
+#define KB_EXTRA_KEYS
 #endif
 
 #define QUICK_TAP_MS        100
@@ -54,7 +72,7 @@ ZMK_CONDITIONAL_LAYER(win_num,  NUM  WIN_TOGGLE, WIN_NUM    )
 ZMK_CONDITIONAL_LAYER(win_func, FUNC WIN_TOGGLE, WIN_FUNC   )
 
 
-#define LAYER(NAME, LT, RT, LM, RM, LB, RB, TH)  ZMK_LAYER(NAME, LT RT LM RM LB RB TH)
+#define LAYER(NAME, LT, RT, LM, RM, LB, RB, TH)  ZMK_LAYER(NAME, LT RT LM RM LB RB TH KB_EXTRA_KEYS)
 
 LAYER(Base,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
@@ -125,11 +143,11 @@ LAYER(Func,
 #define BT_CLEAR   &ht_bt_clr 0 0
 LAYER(Settings,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-		&bootloader   KLOTZ_OUT_TOG  KLOTZ_OUT_BLE &out OUT_USB  XXX         ,   XXX           XXX           XXX           XXX           &tog KOREAN ,
+		&bootloader   KB_OUT_TOG  KB_OUT_BLE &out OUT_USB  XXX         ,   XXX           XXX           XXX           XXX           &tog KOREAN ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		KLOTZ_BT_CLEAR KLOTZ_BT_SEL(3) KLOTZ_BT_SEL(4) KLOTZ_BT_SEL(5) XXX   ,   XXX           TOGGLE_WIN    XXX           XXX           BOOTLOADER  ,
+		KB_BT_CLEAR KB_BT_SEL(3) KB_BT_SEL(4) KB_BT_SEL(5) XXX   ,   XXX           TOGGLE_WIN    XXX           XXX           BOOTLOADER  ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-		XXX           KLOTZ_BT_SEL(0) KLOTZ_BT_SEL(1) KLOTZ_BT_SEL(2) XXX   ,   XXX           XXX           XXX           XXX           XXX         ,
+		XXX           KB_BT_SEL(0) KB_BT_SEL(1) KB_BT_SEL(2) XXX   ,   XXX           XXX           XXX           XXX           XXX         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 																							XXX           XXX             XXX           XXX
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯

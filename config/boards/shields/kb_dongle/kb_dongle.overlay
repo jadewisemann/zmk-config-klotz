@@ -1,0 +1,18 @@
+/*
+ * Generic dongle: a mock kscan so ZMK has something to scan. Positions come
+ * from the halves; the device overlay supplies a matrix transform with the same
+ * number of keys as the keyboard so the keymap lines up.
+ */
+
+/ {
+    chosen {
+        zmk,kscan = &dongle_kscan;
+    };
+
+    dongle_kscan: dongle_kscan {
+        compatible = "zmk,kscan-mock";
+        columns = <10>;
+        rows = <4>;
+        events = <>;
+    };
+};
