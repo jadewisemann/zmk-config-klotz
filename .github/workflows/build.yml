@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.expand.outputs.matrix }}
+      cold: ${{ steps.cold.outputs.cold }}
     steps:
       - uses: actions/checkout@v7
 
@@ -32,10 +33,82 @@ jobs:
           yq -o=json devices.yaml | python3 scripts/matrix.py --check
           echo "matrix=$(yq -o=json devices.yaml | python3 scripts/matrix.py)" >> "$GITHUB_OUTPUT"
 
+      # Only check whether each manifest's west cache exists; nothing is downloaded.
+      - name: Look up west cache (BLE)
+        id: ble
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            modules/
+            tools/
+            zephyr/
+            bootloader/
+            zmk/
+            nrf/
+            nrfxlib/
+          key: west-config-${{ hashFiles('config/west.yml') }}
+          lookup-only: true
+
+      - name: Look up west cache (ESB)
+        id: esb
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            modules/
+            tools/
+            zephyr/
+            bootloader/
+            zmk/
+            nrf/
+            nrfxlib/
+          key: west-config-esb-${{ hashFiles('config-esb/west.yml') }}
+          lookup-only: true
+
+      - name: Manifests that need a fresh cache
+        id: cold
+        run: |
+          cold=()
+          [ "${{ steps.ble.outputs.cache-hit }}" = "true" ] || cold+=('"config"')
+          [ "${{ steps.esb.outputs.cache-hit }}" = "true" ] || cold+=('"config-esb"')
+          echo "cold=[$(IFS=,; echo "${cold[*]}")]" >> "$GITHUB_OUTPUT"
+
+  # Fill a missing west cache once per manifest, instead of every build job
+  # downloading and saving the same 1 GB in parallel. Skipped when warm.
+  warm:
+    name: Prepare ${{ matrix.manifest }} workspace
+    needs: matrix
+    if: needs.matrix.outputs.cold != '[]'
+    runs-on: ubuntu-latest
+    container:
+      image: zmkfirmware/zmk-build-arm:stable
+    strategy:
+      matrix:
+        manifest: ${{ fromJson(needs.matrix.outputs.cold) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: West update
+        run: |
+          west init -l "${{ matrix.manifest }}"
+          west update --fetch-opt=--filter=tree:0
+
+      - uses: actions/cache/save@v6
+        with:
+          path: |
+            modules/
+            tools/
+            zephyr/
+            bootloader/
+            zmk/
+            nrf/
+            nrfxlib/
+          key: west-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+
   # Every firmware is its own job, BLE and ESB alike, so they all run at once.
   build:
     name: ${{ matrix.name }}
-    needs: matrix
+    needs: [matrix, warm]
+    if: ${{ !cancelled() && needs.matrix.result == 'success' && needs.warm.result != 'failure' }}
     runs-on: ubuntu-latest
     container:
       image: zmkfirmware/zmk-build-arm:stable
@@ -45,11 +118,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # One cache per manifest: the ESB manifest pulls a different nrf tree, so
-      # sharing a cache with the BLE builds would just thrash it.
-      - name: Cache west workspace
-        uses: actions/cache@v6
-        continue-on-error: true
+      # One cache per manifest (the ESB manifest pulls a different nrf tree).
+      # Restore only: the warm job is the one place that saves it.
+      - name: Restore west workspace
+        id: west-cache
+        uses: actions/cache/restore@v6
         with:
           path: |
             modules/
@@ -62,10 +135,14 @@ jobs:
           key: west-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
           restore-keys: west-${{ matrix.manifest }}-
 
-      - name: West update
+      # Every revision in the manifests is pinned, so an exact cache hit is
+      # already the right tree and west update can be skipped.
+      - name: West init
         run: |
           west init -l "${{ matrix.manifest }}"
-          west update --fetch-opt=--filter=tree:0
+          if [ "${{ steps.west-cache.outputs.cache-hit }}" != "true" ]; then
+            west update --fetch-opt=--filter=tree:0
+          fi
           west zephyr-export
 
       - name: Build
