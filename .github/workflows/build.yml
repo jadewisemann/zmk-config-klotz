@@ -1,93 +1,140 @@
-on: [push, pull_request, workflow_dispatch]
+name: Build firmware
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+# A newer push to a branch cancels its older run. On main every run finishes,
+# so every main commit gets its own release.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 permissions:
   contents: write
 
 jobs:
-  build_ble:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
-    with:
-      archive_name: firmware-ble
-
-  build_esb:
-    needs: build_ble
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
-    with:
-      build_matrix_path: build-esb.yaml
-      config_path: config-esb
-      archive_name: firmware-esb
-
-  publish:
-    needs: [build_ble, build_esb]
+  matrix:
+    name: Plan builds
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
+    outputs:
+      matrix: ${{ steps.expand.outputs.matrix }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
+      - name: Keymap checks
+        run: python3 tests/check_layout.py
+
+      - name: Expand devices.yaml
+        id: expand
+        run: |
+          yq -o=json devices.yaml | python3 scripts/matrix.py --check
+          echo "matrix=$(yq -o=json devices.yaml | python3 scripts/matrix.py)" >> "$GITHUB_OUTPUT"
+
+  # Every firmware is its own job, BLE and ESB alike, so they all run at once.
+  build:
+    name: ${{ matrix.name }}
+    needs: matrix
+    runs-on: ubuntu-latest
+    container:
+      image: zmkfirmware/zmk-build-arm:stable
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.matrix.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # One cache per manifest: the ESB manifest pulls a different nrf tree, so
+      # sharing a cache with the BLE builds would just thrash it.
+      - name: Cache west workspace
+        uses: actions/cache@v6
+        continue-on-error: true
         with:
-          pattern: firmware-*
+          path: |
+            modules/
+            tools/
+            zephyr/
+            bootloader/
+            zmk/
+            nrf/
+            nrfxlib/
+          key: west-${{ matrix.manifest }}-${{ hashFiles(format('{0}/west.yml', matrix.manifest)) }}
+          restore-keys: west-${{ matrix.manifest }}-
+
+      - name: West update
+        run: |
+          west init -l "${{ matrix.manifest }}"
+          west update --fetch-opt=--filter=tree:0
+          west zephyr-export
+
+      - name: Build
+        shell: bash
+        env:
+          NAME: ${{ matrix.name }}
+          BOARD: ${{ matrix.board }}
+          SHIELD: ${{ matrix.shield }}
+          KEYMAP: ${{ matrix.keymap }}
+          CONFS: ${{ matrix.confs }}
+          OVERLAYS: ${{ matrix.overlays }}
+          DTS_FLAGS: ${{ matrix.cppflags }}
+        run: |
+          set -euo pipefail
+          root="$GITHUB_WORKSPACE"
+          abs() { local IFS=';' out=() p; for p in $1; do out+=("$root/$p"); done; echo "${out[*]}"; }
+          args=(-DZMK_CONFIG="$root/config" -DSHIELD="$SHIELD")
+          [ -n "$KEYMAP" ]    && args+=(-DKEYMAP_FILE="$root/$KEYMAP")
+          [ -n "$CONFS" ]     && args+=(-DEXTRA_CONF_FILE="$(abs "$CONFS")")
+          [ -n "$OVERLAYS" ]  && args+=(-DEXTRA_DTC_OVERLAY_FILE="$(abs "$OVERLAYS")")
+          [ -n "$DTS_FLAGS" ] && args+=(-DDTS_EXTRA_CPPFLAGS="$DTS_FLAGS")
+          west build -s zmk/app -d build -b "$BOARD" -- "${args[@]}"
+          mkdir -p out
+          cp build/zephyr/zmk.uf2 "out/$NAME.uf2"
+
+      - name: Kconfig
+        if: ${{ !cancelled() }}
+        run: grep -v -e "^#" -e "^$" build/zephyr/.config | sort || true
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: fw-${{ matrix.name }}
+          path: out/*.uf2
+          if-no-files-found: error
+
+  # Every main push (and every manual run) gets a new release; nothing is
+  # overwritten. Manual runs from other branches are marked pre-release.
+  release:
+    name: Release
+    needs: build
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: fw-*
           merge-multiple: true
-          path: ./temp_artifacts
+          path: firmware
 
-      - name: Unzip firmware
-        run: |
-          mkdir -p extracted_firmware
-          if [ -f ./temp_artifacts/firmware.zip ]; then
-            unzip ./temp_artifacts/firmware.zip -d ./extracted_firmware
-          else
-            cp ./temp_artifacts/* ./extracted_firmware/ 2>/dev/null || true
-          fi
-
-      - name: Get short SHA & Commit Subject/Body
-        id: get_info
+      - name: Release info
+        id: info
         env:
-          FULL_MSG: ${{ github.event.head_commit.message }}
+          MESSAGE: ${{ github.event.head_commit.message || format('Manual build of {0}', github.ref_name) }}
         run: |
-          echo "short_sha=${GITHUB_SHA::6}" >> $GITHUB_OUTPUT
-          echo "safe_ref=${GITHUB_REF_NAME//\//-}" >> $GITHUB_OUTPUT
+          stamp=$(TZ=Asia/Seoul date +%Y%m%d-%H%M)
+          echo "tag=fw-${stamp}-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+          subject=$(printf '%s\n' "$MESSAGE" | head -n1 | cut -c1-180)
+          echo "name=${stamp} ${subject}" >> "$GITHUB_OUTPUT"
+          python3 scripts/release_notes.py firmware "$MESSAGE" > notes.md
+          ls firmware
 
-          # The release name was the whole commit message, which the releases
-          # API rejects past 256 characters - any commit with a real body took
-          # the publish job down with a 422. Use the subject line only (the
-          # body is already passed separately below) and leave room for the
-          # "[branch] " prefix.
-          COMMIT_SUBJECT=$(python3 -c "
-          import os
-          msg = os.environ.get('FULL_MSG', '')
-          print(msg.split('\n', 1)[0].strip()[:180])
-          ")
-
-          COMMIT_BODY=$(python3 -c "
-          import os
-          msg = os.environ.get('FULL_MSG', '')
-          lines = msg.split('\n')
-          body = '\n'.join(lines[1:]).strip() if len(lines) > 1 else ''
-          print(body)
-          ")
-
-          echo "commit_subject<<EOF" >> $GITHUB_OUTPUT
-          echo "$COMMIT_SUBJECT" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-          echo "commit_body<<EOF" >> $GITHUB_OUTPUT
-          echo "$COMMIT_BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v2
         with:
-          tag_name: "firmware-${{ steps.get_info.outputs.safe_ref }}"
+          tag_name: ${{ steps.info.outputs.tag }}
           target_commitish: ${{ github.sha }}
-          name: "[${{ github.ref_name }}] ${{ steps.get_info.outputs.commit_subject }}"
-          body: ${{ steps.get_info.outputs.commit_body }}
-          draft: false
-          prerelease: false
-          make_latest: true
-          overwrite_files: true
-          files: |
-            extracted_firmware/*.uf2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ steps.info.outputs.name }}
+          body_path: notes.md
+          prerelease: ${{ github.ref != 'refs/heads/main' }}
+          make_latest: ${{ github.ref == 'refs/heads/main' }}
+          files: firmware/*.uf2

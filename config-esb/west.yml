@@ -6,6 +6,8 @@ manifest:
       url-base: https://github.com/urob
     - name: dhruvinsh
       url-base: https://github.com/dhruvinsh
+    - name: duckyb
+      url-base: https://github.com/duckyb
     - name: jadewisemann
       url-base: https://github.com/jadewisemann
     - name: kumbung01
@@ -30,6 +32,10 @@ manifest:
     - name: zmk-tri-state
       remote: dhruvinsh
       revision: ebbc1f0ccdb51669650bb0ac3e34920d09e62400
+    # Urchin shield (34 keys, nice!nano).
+    - name: urchin-zmk-module
+      remote: duckyb
+      revision: a3ab64fa7779f82675695f3d7d17f705f840da25
     # Our own fork, so RX-framing / sleep fixes actually land in the build.
     # Upstream is kumbung01/zmk-feature-split-esb.
     # 57a31ec adds whole-key state resync on reconnect / failed sends - the

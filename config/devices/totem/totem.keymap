@@ -1,0 +1,7 @@
+/*
+ * TOTEM: 38 keys. Positions 0-33 are the shared layout; the four extra keys
+ * (34 L outer pinky, 35 L outer thumb, 36 R outer thumb, 37 R outer pinky)
+ * are left unbound for now. See config/boards/shields/totem/totem.dtsi.
+ */
+#define KB_EXTRA_KEYS &none &none &none &none
+#include "../../keymap/base.keymap"

@@ -1,0 +1,8 @@
+file_format: "1"
+id: kb_dongle
+name: Generic split dongle
+type: shield
+url:
+requires: [pro_micro]
+features:
+  - keys

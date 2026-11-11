@@ -1,0 +1,6 @@
+/*
+ * TC36K: 36 keys. Positions 0-33 are the shared layout; 34 and 35 are the
+ * outermost thumb keys (L3, R3), left unbound for now.
+ */
+#define KB_EXTRA_KEYS &none &none
+#include "../../keymap/base.keymap"

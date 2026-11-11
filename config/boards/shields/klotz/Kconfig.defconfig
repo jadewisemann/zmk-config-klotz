@@ -3,12 +3,13 @@ if SHIELD_KLOTZ_LEFT
     config ZMK_KEYBOARD_NAME
         default "KLOTZ"
 
-    config ZMK_SPLIT_BLE_ROLE_CENTRAL
+    # ZMK_SPLIT_ROLE_CENTRAL rather than the legacy ZMK_SPLIT_BLE_ROLE_CENTRAL:
+    # the legacy symbol *selects* the role, so a dongle-mode build could not
+    # turn it back off with CONFIG_ZMK_SPLIT_ROLE_CENTRAL=n.
+    config ZMK_SPLIT_ROLE_CENTRAL
         default y
 
 endif # LEFT
-
-
 
 if SHIELD_KLOTZ_LEFT || SHIELD_KLOTZ_RIGHT
 
@@ -17,27 +18,7 @@ if SHIELD_KLOTZ_LEFT || SHIELD_KLOTZ_RIGHT
 
 endif # LEFT RIGHT
 
-
-
-if SHIELD_KLOTZ_ESB_LEFT || SHIELD_KLOTZ_ESB_RIGHT || SHIELD_KLOTZ_ESB_DONGLE
-
-    config ZMK_SPLIT
-        default y
-
-endif # ESB
-
-
-
-if SHIELD_KLOTZ_ESB_DONGLE
-
-    config ZMK_SPLIT_ROLE_CENTRAL
-        default y
-
-endif # ESB DONGLE
-
-
-
-if ZMK_BACKLIGHT && !SHIELD_KLOTZ_ESB_DONGLE
+if ZMK_BACKLIGHT
 
     config PWM
         default y

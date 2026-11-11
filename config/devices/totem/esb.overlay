@@ -1,0 +1,13 @@
+/*
+ * ESB link addresses for totem. Left half, right half and dongle all use this
+ * file. Each keyboard gets its own addresses so two ESB keyboards (or their
+ * dongles) never talk to each other.
+ */
+/ {
+    esb_split: esb_split {
+        compatible = "zmk,esb-split";
+        base-addr-0 = <0xB2 0x6D 0x19 0xE7>;
+        base-addr-1 = <0x4C 0xF3 0x85 0x2A>;
+        addr-prefix = <0x13 0x2D 0x5E 0x67 0x9A 0xC1 0xD6 0xEB>;
+    };
+};

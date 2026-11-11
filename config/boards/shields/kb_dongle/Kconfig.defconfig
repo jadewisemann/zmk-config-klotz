@@ -1,0 +1,16 @@
+# Generic split central with no keys of its own (BLE or ESB dongle).
+# The device-specific matrix transform comes from
+# config/devices/<device>/dongle.overlay, added by the build matrix.
+
+if SHIELD_KB_DONGLE
+
+    config ZMK_KEYBOARD_NAME
+        default "Dongle"
+
+    config ZMK_SPLIT
+        default y
+
+    config ZMK_SPLIT_ROLE_CENTRAL
+        default y
+
+endif # SHIELD_KB_DONGLE

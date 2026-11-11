@@ -1,6 +1,0 @@
-#define KLOTZ_BT_CLEAR &none
-#define KLOTZ_BT_SEL(n) &none
-#define KLOTZ_OUT_TOG &none
-#define KLOTZ_OUT_BLE &none
-
-#include "klotz.keymap"

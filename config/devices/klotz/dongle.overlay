@@ -1,20 +1,16 @@
+/*
+ * klotz dongle: same key count and position order as the klotz halves (34).
+ * Only the number and order of positions matter on a dongle; the halves
+ * report already-transformed positions.
+ */
 #include <dt-bindings/zmk/matrix_transform.h>
-#include "klotz_esb.dtsi"
 
 / {
     chosen {
-        zmk,kscan = &dongle_kscan;
         zmk,matrix_transform = &dongle_transform;
     };
 
-    dongle_kscan: dongle_kscan {
-        compatible = "zmk,kscan-mock";
-        columns = <10>;
-        rows = <4>;
-        events = <>;
-    };
-
-    dongle_transform: keymap_transform {
+    dongle_transform: dongle_transform {
         compatible = "zmk,matrix-transform";
         columns = <10>;
         rows = <4>;
