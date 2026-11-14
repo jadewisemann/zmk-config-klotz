@@ -25,9 +25,10 @@ Flash every part of a mode from the same release, and flash `reset-<board>.uf2`
 first when switching a keyboard between modes. Positions 0-33 are the same on every
 keyboard; TOTEM's and TC36K's extra keys come after them and are unbound for now.
 
-Every push to `main` builds all firmware in parallel and publishes a new GitHub release
-tagged `vYYYY.MM.DD` (`vYYYY.MM.DD.2`, … for later releases the same day); older releases
-are kept. Other branches build without releasing (the files are on the Actions run).
+Every push to `main` builds all firmware in parallel and replaces the single `latest`
+pre-release, so the newest build is always on the Releases page. Pushing a tag such as
+`v1.2.0` (`git tag v1.2.0 && git push origin v1.2.0`) publishes a permanent release under
+that name. Other branches build without releasing (the files are on the Actions run).
 
 ### Adding a keyboard
 

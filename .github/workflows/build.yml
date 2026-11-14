@@ -2,7 +2,8 @@ name: Build firmware
 
 on:
   push:
-    branches: ['**']   # tag pushes don't build
+    branches: ['**']
+    tags: ['v*']
   pull_request:
   workflow_dispatch:
 
@@ -166,14 +167,17 @@ jobs:
           path: out/*.uf2
           if-no-files-found: error
 
-  # Every main push (and every manual run on main) gets a new release tagged
-  # vYYYY.MM.DD (KST); a second release on the same day becomes vYYYY.MM.DD.2.
+  # main keeps one rolling `latest` pre-release that is replaced on every push,
+  # so the newest build is always downloadable without piling up releases.
+  # Pushing a tag like v1.2.0 publishes a permanent release under that name.
   # Other branches never release; their files are on the Actions run.
   release:
     name: Release
     needs: build
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    if: startsWith(github.ref, 'refs/tags/v') || (github.ref == 'refs/heads/main' && github.event_name != 'pull_request')
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v7
 
@@ -183,25 +187,18 @@ jobs:
           merge-multiple: true
           path: firmware
 
-      - name: Release info
-        id: info
-        env:
-          MESSAGE: ${{ github.event.head_commit.message || 'Manual build' }}
-        run: |
-          base=v$(TZ=Asia/Seoul date +%Y.%m.%d)
-          tag=$base n=1
-          while git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; do
-            n=$((n + 1)); tag="$base.$n"
-          done
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          python3 scripts/release_notes.py firmware "$MESSAGE" > notes.md
-          ls firmware
+      - name: Release notes
+        run: python3 scripts/release_notes.py firmware "$(git log -1 --format=%B)" > notes.md
 
-      - uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.info.outputs.tag }}
-          target_commitish: ${{ github.sha }}
-          name: ${{ steps.info.outputs.tag }}
-          body_path: notes.md
-          make_latest: true
-          files: firmware/*.uf2
+      - name: Publish version
+        if: github.ref_type == 'tag'
+        run: |
+          gh release create "$GITHUB_REF_NAME" firmware/*.uf2 --verify-tag \
+            --title "$GITHUB_REF_NAME" --notes-file notes.md
+
+      - name: Replace latest
+        if: github.ref_type == 'branch'
+        run: |
+          gh release delete latest --cleanup-tag --yes || true
+          gh release create latest firmware/*.uf2 --prerelease --latest=false \
+            --target "$GITHUB_SHA" --title "latest (${GITHUB_SHA::7})" --notes-file notes.md
