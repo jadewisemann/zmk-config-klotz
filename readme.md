@@ -20,13 +20,12 @@ in `devices.yaml`:
 - `bledongle`: both halves connect to a nice!nano dongle over Bluetooth; the dongle plugs in over USB.
 - `esb`: both halves connect to a nice!nano dongle over ESB (lower latency); the dongle plugs in over USB.
 
-Each release has one zip per keyboard, named with the release so downloads never mix:
-`klotz-v1.2.0.zip` (or `klotz-20261114-2ad5930.zip` for `latest`) unpacks to
-`klotz-v1.2.0/<mode>/<part>.uf2`, e.g. `esb/left.uf2`, `esb/right.uf2`, `esb/dongle.uf2`.
-Flash every part of a mode from the same release, and flash the zip's `reset.uf2` on
-every part first when switching a keyboard between modes (`reset-dongle.uf2` on the
-dongle when it is a different board, as with TOTEM). Positions 0-33 are the same on every
-keyboard; TOTEM's and TC36K's extra keys come after them and are unbound for now.
+Each release attaches every `.uf2` with the release in its name, e.g.
+`klotz-esb-left-v1.2.0.uf2` (or `klotz-esb-left-20261114-2ad5930.uf2` on `latest`), and
+its notes link them in one table per keyboard. Flash every part of a mode from the same
+release, and flash the keyboard's settings reset on every part first when switching modes.
+
+Positions 0-33 are the same on every keyboard; TOTEM's and TC36K's extra keys come after them and are unbound for now.
 
 Every push to `main` builds all firmware in parallel and replaces the single `latest`
 pre-release, so the newest build is always on the Releases page. Pushing a tag such as

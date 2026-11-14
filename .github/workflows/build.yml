@@ -187,27 +187,28 @@ jobs:
           merge-multiple: true
           path: firmware
 
-      # One zip per keyboard; the suffix keeps downloads from different
-      # releases apart (klotz-v1.2.0.zip, klotz-20261114-2ad5930.zip).
-      - name: Package
+      # Every .uf2 is attached with the release in its name
+      # (klotz-esb-left-v1.2.0.uf2, klotz-esb-left-20261114-2ad5930.uf2), and
+      # the notes link each one per keyboard and mode.
+      - name: Prepare files and notes
         run: |
           if [ "$GITHUB_REF_TYPE" = tag ]; then
             suffix=$GITHUB_REF_NAME
           else
             suffix=$(TZ=Asia/Seoul git log -1 --date=format-local:%Y%m%d --format=%cd)-${GITHUB_SHA::7}
           fi
-          yq -o=json devices.yaml | python3 scripts/package.py firmware "$suffix" dist
-          python3 scripts/release_notes.py firmware "$(git log -1 --format=%B)" > notes.md
+          tag=$([ "$GITHUB_REF_TYPE" = tag ] && echo "$GITHUB_REF_NAME" || echo latest)
+          yq -o=json devices.yaml | python3 scripts/release.py firmware "$tag" "$suffix" "$(git log -1 --format=%B)"
 
       - name: Publish version
         if: github.ref_type == 'tag'
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/*.zip --verify-tag \
+          gh release create "$GITHUB_REF_NAME" dist/*.uf2 --verify-tag \
             --title "$GITHUB_REF_NAME" --notes-file notes.md
 
       - name: Replace latest
         if: github.ref_type == 'branch'
         run: |
           gh release delete latest --cleanup-tag --yes || true
-          gh release create latest dist/*.zip --prerelease --latest=false \
+          gh release create latest dist/*.uf2 --prerelease --latest=false \
             --target "$GITHUB_SHA" --title "latest (${GITHUB_SHA::7})" --notes-file notes.md
