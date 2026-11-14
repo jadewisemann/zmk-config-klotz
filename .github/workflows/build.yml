@@ -196,7 +196,7 @@ jobs:
           else
             suffix=$(TZ=Asia/Seoul git log -1 --date=format-local:%Y%m%d --format=%cd)-${GITHUB_SHA::7}
           fi
-          python3 scripts/package.py firmware "$suffix" dist
+          yq -o=json devices.yaml | python3 scripts/package.py firmware "$suffix" dist
           python3 scripts/release_notes.py firmware "$(git log -1 --format=%B)" > notes.md
 
       - name: Publish version

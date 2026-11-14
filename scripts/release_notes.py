@@ -33,8 +33,7 @@ for device in sorted(d for d in by_device if d != "reset"):
         if mode in by_device[device]:
             files = " ".join(f"`{n}`" for n in by_device[device][mode])
             out.append(f"| {device} | {MODES[mode]} | {files} |")
-resets = [n.split("/")[-1] for files in by_device.get("reset", {}).values() for n in files]
-if resets:
-    out.append(f"| reset | settings reset, flash before switching modes | {' '.join(f'`{n}`' for n in resets)} |")
-out += ["", "Flash every part of a mode from the same release; the halves and the dongle must match."]
+out += ["", "Flash every part of a mode from the same release; the halves and the dongle must match.",
+        "`reset.uf2` clears pairings and settings: flash it on every part before switching modes "
+        "(`reset-dongle.uf2` on the dongle, when the zip has one)."]
 print("\n".join(out))
