@@ -19,20 +19,22 @@ subject, _, body = message.partition("\n")
 
 by_device = defaultdict(lambda: defaultdict(list))
 for f in sorted(fw_dir.glob("*.uf2")):
-    device, mode, *_ = f.stem.split("-") + [""]
-    by_device[device][mode].append(f.name)
+    device, _, rest = f.stem.partition("-")
+    mode = rest.split("-")[0]
+    by_device[device][mode].append(rest.replace("-", "/", 1) + ".uf2")
 
 out = [f"**{subject}**", ""]
 if body.strip():
     out += [body.strip(), ""]
-out += ["| keyboard | mode | files |", "|---|---|---|"]
+out += ["One zip per keyboard; paths below are inside it.", "",
+        "| keyboard | mode | files |", "|---|---|---|"]
 for device in sorted(d for d in by_device if d != "reset"):
     for mode in MODES:
         if mode in by_device[device]:
             files = " ".join(f"`{n}`" for n in by_device[device][mode])
             out.append(f"| {device} | {MODES[mode]} | {files} |")
-resets = [n for files in by_device.get("reset", {}).values() for n in files]
+resets = [n.split("/")[-1] for files in by_device.get("reset", {}).values() for n in files]
 if resets:
-    out.append(f"| settings reset | flash before switching modes | {' '.join(f'`{n}`' for n in resets)} |")
+    out.append(f"| reset | settings reset, flash before switching modes | {' '.join(f'`{n}`' for n in resets)} |")
 out += ["", "Flash every part of a mode from the same release; the halves and the dongle must match."]
 print("\n".join(out))
