@@ -21,13 +21,13 @@ in `devices.yaml`:
 - `esb`: both halves connect to a nice!nano dongle over ESB (lower latency); the dongle plugs in over USB.
 
 Files are named `<keyboard>-<mode>-<part>.uf2` (for example `klotz-esb-dongle.uf2`).
-Flash every part of a mode from the same release, and flash `settings_reset-<board>.uf2`
+Flash every part of a mode from the same release, and flash `reset-<board>.uf2`
 first when switching a keyboard between modes. Positions 0-33 are the same on every
 keyboard; TOTEM's and TC36K's extra keys come after them and are unbound for now.
 
 Every push to `main` builds all firmware in parallel and publishes a new GitHub release
-(`fw-<date>-<time>-<sha>`); older releases are kept. Other branches build without
-releasing (the files are on the Actions run); a manual run creates a pre-release.
+tagged `vYYYY.MM.DD` (`vYYYY.MM.DD.2`, … for later releases the same day); older releases
+are kept. Other branches build without releasing (the files are on the Actions run).
 
 ### Adding a keyboard
 

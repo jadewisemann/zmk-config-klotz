@@ -2,6 +2,7 @@ name: Build firmware
 
 on:
   push:
+    branches: ['**']   # tag pushes don't build
   pull_request:
   workflow_dispatch:
 
@@ -165,12 +166,13 @@ jobs:
           path: out/*.uf2
           if-no-files-found: error
 
-  # Every main push (and every manual run) gets a new release; nothing is
-  # overwritten. Manual runs from other branches are marked pre-release.
+  # Every main push (and every manual run on main) gets a new release tagged
+  # vYYYY.MM.DD (KST); a second release on the same day becomes vYYYY.MM.DD.2.
+  # Other branches never release; their files are on the Actions run.
   release:
     name: Release
     needs: build
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -184,12 +186,14 @@ jobs:
       - name: Release info
         id: info
         env:
-          MESSAGE: ${{ github.event.head_commit.message || format('Manual build of {0}', github.ref_name) }}
+          MESSAGE: ${{ github.event.head_commit.message || 'Manual build' }}
         run: |
-          stamp=$(TZ=Asia/Seoul date +%Y%m%d-%H%M)
-          echo "tag=fw-${stamp}-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
-          subject=$(printf '%s\n' "$MESSAGE" | head -n1 | cut -c1-180)
-          echo "name=${stamp} ${subject}" >> "$GITHUB_OUTPUT"
+          base=v$(TZ=Asia/Seoul date +%Y.%m.%d)
+          tag=$base n=1
+          while git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; do
+            n=$((n + 1)); tag="$base.$n"
+          done
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
           python3 scripts/release_notes.py firmware "$MESSAGE" > notes.md
           ls firmware
 
@@ -197,8 +201,7 @@ jobs:
         with:
           tag_name: ${{ steps.info.outputs.tag }}
           target_commitish: ${{ github.sha }}
-          name: ${{ steps.info.outputs.name }}
+          name: ${{ steps.info.outputs.tag }}
           body_path: notes.md
-          prerelease: ${{ github.ref != 'refs/heads/main' }}
-          make_latest: ${{ github.ref == 'refs/heads/main' }}
+          make_latest: true
           files: firmware/*.uf2

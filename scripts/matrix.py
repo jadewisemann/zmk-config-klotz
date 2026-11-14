@@ -72,7 +72,7 @@ def main():
             })
     for board in cfg.get("settings_reset", []):
         include.append({
-            "name": f"settings_reset-{board.split('/')[0]}", "device": "settings_reset",
+            "name": f"reset-{board.split('/')[0]}", "device": "reset",
             "mode": "reset", "board": board, "shield": "settings_reset", "manifest": "config",
             "keymap": "", "confs": "", "overlays": "", "cppflags": "",
         })
